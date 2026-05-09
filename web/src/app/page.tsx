@@ -1,34 +1,35 @@
+"use client";
+
+import { ProfileCard } from "@/components/Dashboard/ProfileCard";
+import { LeaveForm } from "@/components/Dashboard/LeaveForm";
+import { HistoryTable } from "@/components/Dashboard/HistoryTable";
+import { useStaff, useLeaveRequests } from "@/hooks/useDashboard";
+
 export default function Home() {
+  const { data: staff, isLoading: staffLoading } = useStaff();
+  const { data: requests, isLoading: requestsLoading } = useLeaveRequests();
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8">
-      <div className="glass-card p-12 text-center max-w-2xl animate-in fade-in slide-in-from-bottom-8 duration-700">
-        <h1 className="text-5xl font-extrabold mb-6 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-          Agentic Leave System
+    <div className="space-y-12">
+      <header className="flex flex-col gap-2">
+        <h1 className="text-4xl font-extrabold text-white tracking-tight">
+          Staff Dashboard
         </h1>
-        <p className="text-slate-400 text-lg mb-8 leading-relaxed">
-          Experience a production-grade, microservices-based leave management workflow 
-          governed by autonomous AI agents. Secure, observable, and built for scale.
+        <p className="text-slate-400">
+          Manage your leave requests and profile information in one place.
         </p>
-        <div className="flex gap-4 justify-center">
-          <button className="btn-primary">Get Started</button>
-          <button className="px-6 py-3 rounded-lg border border-slate-700 hover:bg-slate-800 transition-colors font-semibold">
-            Documentation
-          </button>
+      </header>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        {/* Left Column: Profile & Form */}
+        <div className="lg:col-span-1 space-y-8">
+          <ProfileCard staff={staff} isLoading={staffLoading} />
+          <LeaveForm />
         </div>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
-        <div className="glass-card p-6 border-t-2 border-purple-500/50">
-          <h3 className="font-bold text-xl mb-2">Microservices</h3>
-          <p className="text-slate-400 text-sm">Isolated domains for Staff, Leave, and Policy rules.</p>
-        </div>
-        <div className="glass-card p-6 border-t-2 border-blue-500/50">
-          <h3 className="font-bold text-xl mb-2">Secure IST</h3>
-          <p className="text-slate-400 text-sm">Internal Service Token trust chain using RS256.</p>
-        </div>
-        <div className="glass-card p-6 border-t-2 border-green-500/50">
-          <h3 className="font-bold text-xl mb-2">Observability</h3>
-          <p className="text-slate-400 text-sm">Full OTel distributed tracing with Jaeger integration.</p>
+
+        {/* Right Column: History */}
+        <div className="lg:col-span-2">
+          <HistoryTable requests={requests} isLoading={requestsLoading} />
         </div>
       </div>
     </div>
