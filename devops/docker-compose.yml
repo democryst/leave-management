@@ -70,6 +70,22 @@ services:
     networks:
       - monitoring-network
 
+  # --- Frontend ---
+  # Self-hosted Next.js app
+  web:
+    build:
+      context: ../web
+      dockerfile: Dockerfile
+    container_name: leave_web
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://gateway:8080
+    depends_on:
+      - otel-collector
+    networks:
+      - monitoring-network
+
 volumes:
   staff_data:
   leave_data:
