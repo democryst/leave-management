@@ -1,18 +1,25 @@
 // services/policy/src/internal/core/domain/mod.rs
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use rust_decimal::Decimal;
+use chrono::{DateTime, Utc, NaiveDate};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
 pub struct LeaveType {
     pub id: Uuid,
     pub name: String,
-    pub allowance_per_year: Decimal,
-    pub requires_approval: bool,
+    pub description: Option<String>,
+    pub default_days: f64,
+    pub is_active: bool,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
 pub struct BlackoutDate {
-    pub date: chrono::NaiveDate,
-    pub description: String,
+    pub id: Uuid,
+    pub name: String,
+    pub start_date: NaiveDate,
+    pub end_date: NaiveDate,
+    pub description: Option<String>,
+    pub created_at: DateTime<Utc>,
 }

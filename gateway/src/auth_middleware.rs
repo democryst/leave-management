@@ -14,6 +14,7 @@ pub struct Claims {
     pub role: String,
     pub exp: usize,
     pub iat: usize,
+    pub iss: Option<String>,
 }
 
 const INTERNAL_ISSUER: &str = "leave-management-gateway";
@@ -34,9 +35,9 @@ pub async fn auth_middleware(
     let edge_token = auth_header.ok_or(StatusCode::UNAUTHORIZED)?;
 
     // 2. Validate Edge JWT (Assuming HS256 for the Edge for now)
-    // In production, this would use the public key from the Identity Provider.
     let edge_secret = env::var("EDGE_JWT_SECRET").unwrap_or_else(|_| "placeholder_secret".to_string());
-    let validation = Validation::default();
+    let mut validation = Validation::default();
+    validation.validate_exp = true;
     
     let token_data = decode::<Claims>(
         edge_token,
@@ -63,14 +64,14 @@ fn generate_internal_token(claims: &Claims) -> Result<String, jsonwebtoken::erro
         .unwrap_or_else(|_| "---BEGIN RSA PRIVATE KEY---\n...placeholder...\n---END RSA PRIVATE KEY---".to_string());
 
     // IST uses RS256 per ADR-001
-    let mut header = Header::new(Algorithm::RS256);
-    header.iss = Some(INTERNAL_ISSUER.to_string());
+    let header = Header::new(Algorithm::RS256);
 
     let ist_claims = Claims {
         sub: claims.sub.clone(),
         role: claims.role.clone(),
-        exp: claims.exp, // Inherit expiration or issue shorter lived token
+        exp: claims.exp,
         iat: claims.iat,
+        iss: Some(INTERNAL_ISSUER.to_string()),
     };
 
     encode(

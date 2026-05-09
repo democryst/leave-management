@@ -4,8 +4,8 @@ import { WebTracerProvider, BatchSpanProcessor } from "@opentelemetry/sdk-trace-
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 import { registerInstrumentations } from "@opentelemetry/instrumentation";
 import { FetchInstrumentation } from "@opentelemetry/instrumentation-fetch";
-import { Resource } from "@opentelemetry/resources";
-import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
+import { resourceFromAttributes } from "@opentelemetry/resources";
+import { ATTR_SERVICE_NAME } from "@opentelemetry/semantic-conventions";
 
 /**
  * Initializes OpenTelemetry tracing for the web frontend.
@@ -18,12 +18,11 @@ export const initTracing = () => {
   });
 
   const provider = new WebTracerProvider({
-    resource: new Resource({
-      [SemanticResourceAttributes.SERVICE_NAME]: "leave-web-frontend",
+    resource: resourceFromAttributes({
+      [ATTR_SERVICE_NAME]: "leave-web-frontend",
     }),
+    spanProcessors: [new BatchSpanProcessor(exporter)],
   });
-
-  provider.addSpanProcessor(new BatchSpanProcessor(exporter));
 
   registerInstrumentations({
     instrumentations: [
@@ -36,5 +35,5 @@ export const initTracing = () => {
   });
 
   provider.register();
-  console.log("🔭 OTel Tracing Initialized: leave-web-frontend");
+  console.log("🔭 OTel Tracing Initialized: leave-web-frontend (v2.x)");
 };

@@ -1,10 +1,11 @@
 // services/leave/src/internal/core/domain/mod.rs
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use rust_decimal::Decimal;
+use bigdecimal::BigDecimal;
 use chrono::{DateTime, Utc, NaiveDate};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, sqlx::Type, PartialEq)]
+#[sqlx(type_name = "text", rename_all = "lowercase")]
 pub enum LeaveStatus {
     Pending,
     Approved,
@@ -12,7 +13,7 @@ pub enum LeaveStatus {
     Cancelled,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
 pub struct LeaveRequest {
     pub id: Uuid,
     pub staff_id: Uuid,
@@ -25,11 +26,11 @@ pub struct LeaveRequest {
     pub created_at: DateTime<Utc>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
 pub struct LeaveBalance {
     pub staff_id: Uuid,
     pub leave_type_id: Uuid,
-    pub balance: Decimal,
-    pub accrued_this_year: Decimal,
+    pub balance: BigDecimal,
+    pub accrued_this_year: BigDecimal,
     pub updated_at: DateTime<Utc>,
 }

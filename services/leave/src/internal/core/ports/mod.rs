@@ -2,6 +2,7 @@
 use async_trait::async_trait;
 use uuid::Uuid;
 use crate::internal::core::domain::{LeaveRequest, LeaveBalance, LeaveStatus};
+use bigdecimal::BigDecimal;
 
 #[async_trait]
 pub trait LeaveRepository: Send + Sync {
@@ -14,7 +15,10 @@ pub trait LeaveRepository: Send + Sync {
     // Balance Logic
     async fn get_balance(&self, staff_id: Uuid, leave_type_id: Uuid) -> Result<Option<LeaveBalance>, String>;
     async fn save_balance(&self, balance: LeaveBalance) -> Result<(), String>;
-    async fn update_balance(&self, staff_id: Uuid, leave_type_id: Uuid, amount: rust_decimal::Decimal) -> Result<(), String>;
+    async fn update_balance(&self, staff_id: Uuid, leave_type_id: Uuid, amount: BigDecimal) -> Result<(), String>;
+
+    // Atomic Operations
+    async fn create_request_and_update_balance(&self, request: LeaveRequest, balance_delta: BigDecimal) -> Result<LeaveRequest, String>;
 }
 
 #[async_trait]
