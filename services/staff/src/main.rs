@@ -1,10 +1,8 @@
-use axum::{routing::get, Router, Json, extract::Path};
+use axum::{routing::get, Router};
 use std::sync::Arc;
 use crate::internal::adapters::repository::SqlxStaffRepository;
+use crate::internal::adapters::handler::get_staff;
 use sqlx::postgres::PgPoolOptions;
-use uuid::Uuid;
-
-use crate::internal::core::ports::StaffRepository;
 
 mod internal;
 
@@ -18,25 +16,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .max_connections(5)
         .connect(&db_url).await?;
 
-    // 2. Initialize Repository
+    // 2. Initialize Dependencies (Ports/Adapters)
     let repo = Arc::new(SqlxStaffRepository::new(pool));
 
-    // 3. Build Router
+    // 3. Compose Application
     let app = Router::new()
         .route("/health", get(|| async { "Staff Service OK" }))
-        .route("/api/v1/staff/:id", get({
-            let repo = repo.clone();
-            move |Path(id): Path<Uuid>| {
-                let repo = repo.clone();
-                async move {
-                    match repo.find_by_id(id).await {
-                        Ok(Some(staff)) => (axum::http::StatusCode::OK, Json(serde_json::json!(staff))),
-                        Ok(None) => (axum::http::StatusCode::NOT_FOUND, Json(serde_json::json!({"error": "Staff not found"}))),
-                        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json!({"error": e})))
-                    }
-                }
-            }
-        }));
+        .route("/api/v1/staff/:id", get(get_staff))
+        .with_state(repo);
 
     // 4. Start Server
     let addr = "0.0.0.0:8081";

@@ -1,23 +1,12 @@
-use axum::{routing::post, Router, Json};
+use axum::{routing::post, Router};
 use std::sync::Arc;
 use crate::internal::core::services::LeaveApplicationService;
 use crate::internal::adapters::repository::SqlxLeaveRepository;
 use crate::internal::adapters::gateway::policy_client::PolicyServiceClient;
+use crate::internal::adapters::handler::apply_leave;
 use sqlx::postgres::PgPoolOptions;
-use serde::Deserialize;
-use bigdecimal::BigDecimal;
 
 mod internal;
-
-#[derive(Deserialize)]
-struct CreateLeaveRequest {
-    staff_id: String,
-    leave_type_id: String,
-    start_date: String,
-    end_date: String,
-    reason: String,
-    days: BigDecimal,
-}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -40,24 +29,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 4. Build Router
     let app = Router::new()
-        .route("/api/v1/leave/requests", post(move |Json(payload): Json<CreateLeaveRequest>| {
-            let service = leave_service.clone();
-            async move {
-                let token = "system-token"; // Placeholder for auth logic
-                match service.apply_for_leave(
-                    &payload.staff_id,
-                    &payload.leave_type_id,
-                    &payload.start_date,
-                    &payload.end_date,
-                    payload.reason,
-                    payload.days,
-                    token
-                ).await {
-                    Ok(req) => (axum::http::StatusCode::CREATED, Json(serde_json::to_value(req).unwrap())),
-                    Err(e) => (axum::http::StatusCode::BAD_REQUEST, Json(serde_json::json!({ "error": e.to_string() })))
-                }
-            }
-        }));
+        .route("/api/v1/leave/requests", post(apply_leave))
+        .with_state(leave_service);
 
     // 5. Start Server
     let addr = "0.0.0.0:8082";

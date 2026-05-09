@@ -1,10 +1,8 @@
-use axum::{routing::get, Router, Json, extract::Path};
+use axum::{routing::get, Router};
 use std::sync::Arc;
 use crate::internal::adapters::repository::SqlxPolicyRepository;
+use crate::internal::adapters::handler::get_policy;
 use sqlx::postgres::PgPoolOptions;
-use uuid::Uuid;
-
-use crate::internal::core::ports::PolicyRepository;
 
 mod internal;
 
@@ -18,25 +16,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .max_connections(5)
         .connect(&db_url).await?;
 
-    // 2. Initialize Repository
+    // 2. Initialize Dependencies
     let repo = Arc::new(SqlxPolicyRepository::new(pool));
 
-    // 3. Build Router
+    // 3. Compose Application
     let app = Router::new()
         .route("/health", get(|| async { "Policy Service OK" }))
-        .route("/api/v1/policies/leave-types/:id", get({
-            let repo = repo.clone();
-            move |Path(id): Path<Uuid>| {
-                let repo = repo.clone();
-                async move {
-                    match repo.get_leave_type_by_id(id).await {
-                        Ok(Some(lt)) => (axum::http::StatusCode::OK, Json(serde_json::json!(lt))),
-                        Ok(None) => (axum::http::StatusCode::NOT_FOUND, Json(serde_json::json!({"error": "Policy not found"}))),
-                        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json!({"error": e})))
-                    }
-                }
-            }
-        }));
+        .route("/api/v1/policies/leave-types/:id", get(get_policy))
+        .with_state(repo);
 
     // 4. Start Server
     let addr = "0.0.0.0:8083";
