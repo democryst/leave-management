@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  # --- Databases ---
+  # Isolated per domain according to DDD principles
+  staff_db:
+    image: postgres:15-alpine
+    container_name: staff_db
+    environment:
+      POSTGRES_USER: staff_user
+      POSTGRES_PASSWORD: ${STAFF_DB_PASSWORD:-secret}
+      POSTGRES_DB: staff_database
+    ports:
+      - "5432:5432"
+    volumes:
+      - staff_data:/var/lib/postgresql/data
+    networks:
+      - monitoring-network
+
+  leave_db:
+    image: postgres:15-alpine
+    container_name: leave_db
+    environment:
+      POSTGRES_USER: leave_user
+      POSTGRES_PASSWORD: ${LEAVE_DB_PASSWORD:-secret}
+      POSTGRES_DB: leave_database
+    ports:
+      - "5433:5432"
+    volumes:
+      - leave_data:/var/lib/postgresql/data
+    networks:
+      - monitoring-network
+
+  policy_db:
+    image: postgres:15-alpine
+    container_name: policy_db
+    environment:
+      POSTGRES_USER: policy_user
+      POSTGRES_PASSWORD: ${POLICY_DB_PASSWORD:-secret}
+      POSTGRES_DB: policy_database
+    ports:
+      - "5434:5432"
+    volumes:
+      - policy_data:/var/lib/postgresql/data
+    networks:
+      - monitoring-network
+
+  # --- Observability Stack ---
+  # Centralizes distributed traces from all microservices
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    container_name: otel_collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+    depends_on:
+      - jaeger
+    networks:
+      - monitoring-network
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger_ui
+    ports:
+      - "16686:16686" # Jaeger UI
+      - "14250:14250" # gRPC endpoint
+    networks:
+      - monitoring-network
+
+volumes:
+  staff_data:
+  leave_data:
+  policy_data:
+
+networks:
+  monitoring-network:
+    driver: bridge

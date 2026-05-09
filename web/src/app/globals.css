@@ -1,0 +1,58 @@
+/* 
+ * Global Styles for Leave Management System [M2.1]
+ * Theme: Dark Mode, Glassmorphism, Vivid Purple/Blue Accents
+ */
+
+@import "tailwindcss";
+
+:root {
+    /* Colors */
+    --color-background-dark: #0f172a; 
+    --color-surface-dark: #1e293b;    
+    --color-text-primary: #f8fafc;    
+    --color-accent-primary: #a855ff;  
+    --color-accent-secondary: #3b82f6; 
+    --color-border-light: rgba(255, 255, 255, 0.1);
+
+    /* Glassmorphism Tokens */
+    --glass-blur: 16px;
+    --glass-opacity: 0.1;
+    --glass-border: 1px solid var(--color-border-light);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-background-dark);
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%);
+    color: var(--color-text-primary);
+    min-height: 100vh;
+}
+
+.glass-card {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border);
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+    box-shadow: 0 10px 20px -5px rgba(168, 85, 247, 0.5);
+}

@@ -1,0 +1,19 @@
+# Rust
+target/
+**/*.rs.bk
+Cargo.lock
+
+# Node / Bun
+node_modules/
+.next/
+dist/
+.env*
+bun.lockb
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Obsidian
+.obsidian/
