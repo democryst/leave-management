@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/lib/providers/QueryProvider";
+import TracingProvider from "@/lib/providers/TracingProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -21,13 +22,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased`}>
-        <QueryProvider>
-          <div className="min-h-screen relative overflow-hidden">
-            <main className="relative z-10 p-6 md:p-12 max-w-7xl mx-auto">
-              {children}
-            </main>
-          </div>
-        </QueryProvider>
+        <TracingProvider>
+          <QueryProvider>
+            <div className="min-h-screen relative overflow-hidden">
+              <main className="relative z-10 p-6 md:p-12 max-w-7xl mx-auto">
+                {children}
+              </main>
+            </div>
+          </QueryProvider>
+        </TracingProvider>
       </body>
     </html>
   );
