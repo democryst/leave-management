@@ -2,7 +2,8 @@
 
 - `[x]` [M3.1] Core Domain Services (Dispatch gemma-base)
 - `[x]` [M3.2] Service-to-Service Integration
-    - `[x] ` Wiring PolicyClient into LeaveApplicationService
-- `[/]` [M3.3] Integration Testing (gemma-test)
-    - `[ ]` Implement Mocked Service-to-Service integration tests
-- `[ ]` [M3.4] System Orchestration (Docker verification)
+- `[x]` [M3.3] Integration Testing (gemma-test)
+    - `[x]` Implement Mocked Service-to-Service integration tests
+- `[x]` [M3.4] System Orchestration (Docker verification)
+    - `[x]` Audit docker-compose.yml dependencies
+    - `[x]` Verify network topology for self-hosted deployment

@@ -64,3 +64,61 @@ impl LeaveApplicationService {
             })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use async_trait::async_trait;
+
+    // --- Manual Mocks ---
+    struct MockRepo { balance: f64 }
+    #[async_trait]
+    impl LeaveRepository for MockRepo {
+        async fn check_balance(&self, _: &str) -> Result<f64, anyhow::Error> { Ok(self.balance) }
+        async fn create_request_and_update_balance(&self, req: LeaveRequest, _: f64) -> Result<LeaveRequest, anyhow::Error> {
+            if self.balance < 0.0 { return Err(anyhow::anyhow!("balance_too_low")); }
+            Ok(req)
+        }
+        async fn update_balance(&self, _: &str, _: f64) -> Result<(), anyhow::Error> { Ok(()) }
+        async fn get_requests_by_staff(&self, _: &str) -> Result<Vec<LeaveRequest>, anyhow::Error> { Ok(vec![]) }
+    }
+
+    struct MockPolicy { valid: bool }
+    #[async_trait]
+    impl PolicyProvider for MockPolicy {
+        async fn is_leave_type_valid(&self, _: &str) -> Result<bool, anyhow::Error> { Ok(self.valid) }
+    }
+
+    #[tokio::test]
+    async fn test_apply_for_leave_success() {
+        let service = LeaveApplicationService::new(
+            Arc::new(MockRepo { balance: 10.0 }),
+            Arc::new(MockPolicy { valid: true })
+        );
+
+        let result = service.apply_for_leave("ST-1", "AL", "2024-01-01".into(), "2024-01-05".into(), 5.0).await;
+        assert!(result.is_ok());
+    }
+
+    #[tokio::test]
+    async fn test_apply_for_leave_invalid_type() {
+        let service = LeaveApplicationService::new(
+            Arc::new(MockRepo { balance: 10.0 }),
+            Arc::new(MockPolicy { valid: false })
+        );
+
+        let result = service.apply_for_leave("ST-1", "XX", "2024-01-01".into(), "2024-01-05".into(), 5.0).await;
+        assert!(matches!(result, Err(LeaveServiceError::InvalidLeaveType(_))));
+    }
+
+    #[tokio::test]
+    async fn test_apply_for_leave_insufficient_balance() {
+        let service = LeaveApplicationService::new(
+            Arc::new(MockRepo { balance: -1.0 }), // Trigger error in mock
+            Arc::new(MockPolicy { valid: true })
+        );
+
+        let result = service.apply_for_leave("ST-1", "AL", "2024-01-01".into(), "2024-01-05".into(), 5.0).await;
+        assert!(matches!(result, Err(LeaveServiceError::InsufficientBalance { .. })));
+    }
+}
