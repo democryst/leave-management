@@ -50,6 +50,29 @@
 - **Workflow Elasticity**: Decoupled business rules (Policy) from state machine execution (Workflow).
 
 ## [HASH: ab1f435d8e7e10882e3794356a59276c1f10c57655cc5e6149176378e994e637] | [REF: FR-4.3] | [2026-05-10T11:57:12Z] | [95536555]
-- **Holiday-Aware Duration Engine**: Integrated dynamic holiday lookup from Policy Service into core duration math.
-- **Regulatory Precision**: Excludes public holidays and weekends from leave balance deductions to ensure legal compliance.
-- **IST Gating**: Hardened the Duration calculation with mandatory inter-service rule validation.
+- **Holiday-Aware Duration Engine**: Offloaded public holiday logic to the core domain with Policy Service as the source of truth.
+- **Dynamic Net Calculations**: Implemented `NetDays = TotalDays - Holidays` logic for accurate balance deduction.
+
+## [HASH: aba76f3004c605c401c4c14e979ac4f19d6db2d8fddb45793685304f1d8d1bd4] | [REF: CLAUDE.md v8.0] | [2026-05-10T12:01:40Z] | [ab1f435d]
+- **Sovereign Agentic Commander Protocol**: Institutionalized the Zero-Trust/Zero-Magic paradigm for high-autonomy engineering.
+- **XFV Proof Requirement**: Mandated physical execution logs (`5_EXECUTION_LOG.txt`) for all tool-driven operations.
+- **KHP Verification**: Established the Knowledge Hash Protocol for immutable recording of verified insights.
+
+## [HASH: 10bd43939b72232326367ff8bb02d2e808bb92acb36a2c24e072c8c75e3b68e3] | [REF: INFRA-001] | 2026-05-10 | [PARENT: e0ae510b]
+### [DevOps] — Deployment Infrastructure Pattern
+**Institutionalized:** 2026-05-10
+**Context:** Standardizing local development and production-like deployment pipelines.
+**Pattern:**
+1. **Local Orchestration**: Use `docker-compose.yaml` with health-checked dependencies (Postgres/Jaeger).
+2. **Production Blueprint**: Maintain declarative Kubernetes manifests in `/k8s`.
+3. **Unified Interface**: Use a root `Makefile` for all build/test/deploy operations to ensure consistency.
+
+## [HASH: e0ae510b86e6fea3b6282f978690774e040ea0e3b42e992f23e064fbb01ef45e] | [REF: ADR-006] | 2026-05-10 | [PARENT: aba76f30]
+- **Configurable Resilience Strategy**: Implemented environment-variable driven Rate Limiting and Circuit Breaking.
+- **12-Factor Compliance**: Decoupled resilience thresholds from code to support dynamic production tuning.
+- **Fault Isolation**: Per-service circuit breakers prevent cascading failures across microservice boundaries.
+
+## [HASH: 10bd43939b72232326367ff8bb02d2e808bb92acb36a2c24e072c8c75e3b68e3] | [REF: INFRA-001] | [2026-05-10T12:10:30Z] | [e0ae510b]
+- **Deployment Infrastructure Pattern**: Standardized the use of `docker-compose` for local dev and Kubernetes for production.
+- **Unified Dev Automation**: Implemented a root `Makefile` as the primary entry point for build, test, and deploy cycles.
+- **Microservice Orchestration**: Established service discovery and network isolation patterns within containerized environments.
