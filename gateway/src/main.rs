@@ -80,6 +80,8 @@ async fn main() {
         
         // Policy Routes
         .route("/policy/leave-types", get(proxy_policy_leave_types))
+        .route("/policy/leave-types/:id", get(proxy_policy_leave_type_by_id))
+        .route("/policy/holidays", get(proxy_policy_holidays))
         
         .layer(middleware::from_fn(auth_middleware::auth_middleware))
         .with_state(state);
@@ -146,6 +148,31 @@ async fn proxy_policy_leave_types(
     headers: header::HeaderMap,
 ) -> impl IntoResponse {
     let url = format!("{}/api/v1/policies", state.policy_service_url);
+    forward_request(&state.client, &url, headers, Method::GET, None).await
+}
+
+async fn proxy_policy_leave_type_by_id(
+    State(state): State<Arc<AppState>>,
+    Path(id): Path<String>,
+    headers: header::HeaderMap,
+) -> impl IntoResponse {
+    let url = format!("{}/api/v1/policy/leave-types/{}", state.policy_service_url, id);
+    forward_request(&state.client, &url, headers, Method::GET, None).await
+}
+
+async fn proxy_policy_holidays(
+    State(state): State<Arc<AppState>>,
+    axum::extract::Query(query): axum::extract::Query<serde_json::Value>,
+    headers: header::HeaderMap,
+) -> impl IntoResponse {
+    let mut url = format!("{}/api/v1/policy/holidays", state.policy_service_url);
+    
+    if let Ok(query_str) = serde_urlencoded::to_string(&query) {
+        if !query_str.is_empty() {
+            url = format!("{}?{}", url, query_str);
+        }
+    }
+
     forward_request(&state.client, &url, headers, Method::GET, None).await
 }
 

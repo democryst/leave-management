@@ -13,6 +13,7 @@ pub struct LeaveType {
     pub name: String,
     pub description: Option<String>,
     pub default_days: f64,
+    pub auto_approve: bool,
     pub is_active: bool,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
@@ -39,4 +40,20 @@ impl Mask for BlackoutDate {
         self.clone()
     }
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
+pub struct Holiday {
+    pub id: Uuid,
+    pub name: String,
+    pub date: NaiveDate,
+    pub description: Option<String>,
+    pub created_at: DateTime<Utc>,
+}
+
+impl Mask for Holiday {
+    fn mask(&self) -> Self {
+        self.clone()
+    }
+}
+
 pub mod rules;

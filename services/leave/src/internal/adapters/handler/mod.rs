@@ -49,9 +49,9 @@ pub async fn apply_leave(
 
 pub async fn get_pending_approvals(
     State(service): State<Arc<dyn LeaveService>>,
-    axum::extract::HeaderMap(headers): axum::extract::HeaderMap,
+    headers: axum::http::HeaderMap,
 ) -> impl IntoResponse {
-    let user_id_str = headers.get("X-User-Id").and_then(|h| h.to_str().ok());
+    let user_id_str = headers.get("X-User-Id").and_then(|h: &axum::http::HeaderValue| h.to_str().ok());
     
     if let Some(user_id) = user_id_str.and_then(|s| Uuid::parse_str(s).ok()) {
         match service.get_approver_queue(user_id).await {

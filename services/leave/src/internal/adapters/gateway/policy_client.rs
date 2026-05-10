@@ -41,4 +41,45 @@ impl PolicyProvider for PolicyServiceClient {
             }
         }
     }
+
+    async fn get_holiday_count(&self, start: chrono::NaiveDate, end: chrono::NaiveDate, token: &str) -> Result<usize, String> {
+        let url = format!("{}/api/v1/policy/holidays", self.base_url);
+
+        let response = self.http_client
+            .get(&url)
+            .query(&[("start", start.to_string()), ("end", end.to_string())])
+            .header("Authorization", format!("Bearer {}", token))
+            .send()
+            .await
+            .map_err(|e| format!("HTTP error calling Policy Service: {}", e))?;
+
+        if response.status() != StatusCode::OK {
+            return Err(format!("Policy Service error: {}", response.status()));
+        }
+
+        let holidays: Vec<serde_json::Value> = response.json().await
+            .map_err(|e| format!("Failed to parse holidays: {}", e))?;
+
+        Ok(holidays.len())
+    }
+
+    async fn get_leave_type_info(&self, leave_type_id: Uuid, token: &str) -> Result<crate::internal::core::ports::LeaveTypeInfo, String> {
+        let url = format!("{}/api/v1/policy/leave-types/{}", self.base_url, leave_type_id);
+
+        let response = self.http_client
+            .get(&url)
+            .header("Authorization", format!("Bearer {}", token))
+            .send()
+            .await
+            .map_err(|e| format!("HTTP error calling Policy Service: {}", e))?;
+
+        if response.status() != StatusCode::OK {
+            return Err(format!("Policy Service error: {}", response.status()));
+        }
+
+        let info: crate::internal::core::ports::LeaveTypeInfo = response.json().await
+            .map_err(|e| format!("Failed to parse leave type info: {}", e))?;
+
+        Ok(info)
+    }
 }

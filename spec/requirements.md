@@ -76,3 +76,20 @@ Build a secure, robust, and scalable Microservices-based Leave Management System
 - An admin can change any staff's manager.
 - Leave requests automatically decrement the balance only upon approval.
 - The system prevents requesting more leave than the current balance (except for specific types like Unpaid).
+
+## 8. Formal Verification & Mathematical Integrity (Advanced)
+
+To ensure absolute reliability in high-stakes HR operations, the system targets the following formal verification goals:
+
+### 8.1 Invariant Proofs (Lean 4)
+- **[FV-1.1] Conservation of Leave:** Prove that the total accrued leave for any staff member always equals `Initial + ΣAccruals - ΣTaken`.
+- **[FV-1.2] Negative Balance Prevention:** Prove that no sequence of operations (except for Unpaid Leave) can result in a negative leave balance.
+- **[FV-1.3] Cycle-Free Org Chart:** Prove that the organizational hierarchy is a Directed Acyclic Graph (DAG) and contains no reporting loops.
+
+### 8.2 Reachability & Security (Z3)
+- **[FV-2.1] Permission Isolation:** Use SMT solving to prove that a user with the `Staff` role can never reach an `Admin` endpoint without an `admin` role in their IST.
+- **[FV-2.2] Blackout Enforcement:** Prove that no `Approved` leave request can exist within a defined `BlackoutDate` range.
+
+### 8.3 Algebraic Correctness
+- **[FV-3.1] Cardinality Check:** Ensure all `Enum` states (LeaveStatus, StaffRole) are exhaustively handled in match statements (Algebraic Data Types).
+- **[FV-3.2] Precision Math:** Use `BigDecimal` to ensure zero floating-point drift in accrual calculations.

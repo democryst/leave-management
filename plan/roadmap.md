@@ -1,31 +1,35 @@
-# Project Roadmap: Leave Management Microservices
+# Project Roadmap: Public Holiday Integration (FR-4.3)
 
-## 🎯 Strategic Milestones
+## 🎯 Goal
+Implement automated public holiday exclusion during leave duration calculation to ensure staff balances are accurately deducted.
 
-### Milestone 0: Foundation & Identity [COMPLETED]
-- **Goal:** Establish the Gateway and the Staff domain.
-- **Deliverables:** API Gateway (AuthN/AuthZ), Staff Service (Identity/Org Chart), Shared OTel Collector.
-- **Status:** Done. IST propagation and Identity Header injection implemented.
+## 📈 Milestone 1: Policy Service Expansion
+- [ ] **Domain:** Add `Holiday` entity and `HolidayRepository` port.
+- [ ] **Adapters:** Implement SQLx repository for `holidays` table.
+- [ ] **API:** Expose `GET /api/v1/policy/holidays?start=...&end=...` endpoint.
 
-### Milestone 1: Leave Logic & Balances [COMPLETED]
-- **Goal:** Core leave engine implementation.
-- **Deliverables:** Leave Service (Balances, Accruals, State Machine), Policy Service (Types/Blackouts).
-- **Status:** Done. Microservices wired and skeletal domain logic implement.
+## 📈 Milestone 2: Leave Service Integration
+- [ ] **Ports:** Add `PolicyClient` port to `leave` service.
+- [ ] **Logic:** Update `apply_leave` service to fetch holidays and subtract them from `duration`.
+- [ ] **Verification:** Unit tests for weekends + holidays duration calculation.
 
-### Milestone 2: Web Experience [COMPLETED]
-- **Goal:** Staff and Admin dashboards.
-- **Deliverables:** Next.js App, Staff Portal, Admin Policy Management.
-- **Status:** Done. Full-stack connectivity verified with distributed tracing.
+## 📈 Milestone 3: Approver Delegation (FR-4.2)
+- [ ] **Domain:** Add `Delegation` entity (delegator, delegatee, start, end) in `staff` service.
+- [ ] **Logic:** Implement active delegation lookup in `StaffService`.
+- [ ] **Integration:** Update `LeaveService` to authorize approvals from delegatees.
+- [ ] **Verification:** Test approval bypass via valid delegation token.
 
-### Milestone 3: Hardening & Resilience [COMPLETED]
-- **Goal:** Production-grade security and observability.
-- **Deliverables:** Circuit Breakers, Global Tracing Audit, Distributed Integration Tests.
-- **Status:** Done. OTel 0.31 integrated, PII masking enforced, container orchestration finalized.
+## 📈 Milestone 4: Auto-Approval Logic (FR-4.1)
+- [ ] **Policy:** Add `auto_approve` boolean to `LeaveType` domain and DB.
+- [ ] **Leave:** Update `submit_request` to handle immediate `Approved` status if type is auto-approved.
+- [ ] **Verification:** Test immediate balance deduction and status transition.
+
+## 📉 Risk Register
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| Service Latency | Medium | Cache holiday dates in `leave` service memory. |
+| Overlapping Holidays | Low | Use a `Set<Date>` to handle duplicate holiday definitions. |
+| Timezone Drift | High | Force all dates to UTC at the API Gateway. |
 
 ---
-
-## 📅 Timeline Projection
-- **Week 1:** M0 (Foundation) - [DONE]
-- **Week 2:** M1 (Leave Engine) + M2 (Frontend Shell) - [DONE]
-- **Week 3:** M2 (Full Web) + M3 (Hardening) - [DONE]
-- **Week 4:** Final Verification & Documentation - [DONE]
+*Status: Initialized (SDLC Phase: /plan)*

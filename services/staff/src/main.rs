@@ -58,6 +58,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app = Router::new()
         .route("/health", get(|| async { "Staff Service OK" }))
         .route("/api/v1/staff/profile", get(crate::internal::adapters::handler::get_profile))
+        .route("/api/v1/staff/delegations", get(crate::internal::adapters::handler::get_delegations))
+        .route("/api/v1/staff/delegations/check/:delegatee/:delegator", get(crate::internal::adapters::handler::check_delegation))
         .route("/api/v1/staff/:id", get(get_staff))
         .with_state(service);
 

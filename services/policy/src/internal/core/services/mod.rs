@@ -20,6 +20,10 @@ impl PolicyService for PolicyServiceImpl {
         self.repo.get_all_leave_types().await
     }
 
+    async fn get_leave_type(&self, id: Uuid) -> Result<Option<LeaveType>, String> {
+        self.repo.get_leave_type_by_id(id).await
+    }
+
     async fn validate_leave_request(&self, leave_type_id: Uuid, start_date: chrono::NaiveDate, end_date: chrono::NaiveDate) -> Result<bool, String> {
         // 1. Check if leave type exists and is active
         let leave_type = self.repo.get_leave_type_by_id(leave_type_id).await?;
@@ -36,5 +40,9 @@ impl PolicyService for PolicyServiceImpl {
             },
             _ => Ok(false),
         }
+    }
+
+    async fn get_holidays_in_range(&self, start: chrono::NaiveDate, end: chrono::NaiveDate) -> Result<Vec<crate::internal::core::domain::Holiday>, String> {
+        self.repo.get_holidays(start, end).await
     }
 }

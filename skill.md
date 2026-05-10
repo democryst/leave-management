@@ -11,13 +11,26 @@
 **Gotcha:** Supervisor must audit inter-service contracts (gRPC/REST) early in the `/tech` phase to prevent breaking changes during parallel agent execution.
 
 ## [HASH: 6cff285d20a1b54622521fb8a854e3cc235ad2d1a8523344f3868aca3264397e] | [REF: CLAUDE.md v7.0] | 2026-05-10 | [PARENT: Distributed PII Masking]
-## [Security] — Distributed PII Masking
-**Discovered:** 2026-05-09
-**Verified:** 2026-05-10 (Implemented in Staff, Leave, Policy services)
-**Pattern:** Mandatory implementation of a `Mask` trait in the Rust `domain` layer. The Service layer must call `.mask()` before returning data to Adapters.
-**Gotcha:** Ensure `password_hash` is always masked even in internal logs.
+## [Architectural] — Delegatee-Aware Authorization
+**Discovered:** 2026-05-10
+**Context:** Cross-service authorization where one user acts on behalf of another (Delegation).
+**Pattern:** 
+1. The **Target Service** (e.g., Leave) receives a request from a Delegatee.
+2. The **Target Service** queries the **Identity/Staff Service** via a specialized check API (`/delegations/check/:delegatee/:delegator`).
+3. Authorization is granted if the delegation is active, preserving DDD boundaries (Target Service doesn't need to know *how* delegations are stored).
+**Gotcha:** Always propagate the `system-token` for service-to-service checks to bypass user-level permission loops.
+
+## [Architectural] — Policy-Driven State Transitions
+**Discovered:** 2026-05-10
+**Context:** Implementing "Auto-Approval" logic in the Leave Management System.
+**Pattern:**
+1. The **Primary Service** (Leave) fetches "Rule Metadata" (e.g., `auto_approve`) from the **Policy Service** during the creation phase.
+2. If the policy flag is set, the **Primary Service** immediately transitions the entity to the final state (`Approved`) and assigns a "System User" ID (`Uuid::nil()`) as the approver.
+3. This decouples business rule definitions (Policy) from workflow execution (Leave).
+**Gotcha:** Ensure atomic updates to both the entity status and the side-effects (e.g., balance deduction) to prevent partial approvals.
 
 ## [Technical] — Rust v1.8x / Axum 0.7 / SQLx 0.8 Hardening
+... (remaining content)
 **Discovered:** 2026-05-09
 **Context:** Migrating microservices to modern Axum/SQLx stacks.
 **Pattern:**

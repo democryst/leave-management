@@ -1,4 +1,15 @@
-# Security Architecture (ADR-001)
+# Security Architecture & Principles
+
+## 🏛️ Security Foundation: The CIA Triad
+Every security measure in the Leave Management System is designed to protect one or more of these pillars:
+- **Confidentiality:** Ensuring data is accessible only to authorized users (e.g., RS256 IST, Argon2 hashing).
+- **Integrity:** Ensuring data is accurate and untampered (e.g., Digital Signatures, SQL Parameterization).
+- **Availability:** Ensuring systems are resilient (e.g., Microservice redundancy, DDoS mitigation).
+
+## 🛡️ Core Engineering Principles
+- **Defense in Depth:** Multiple layers of protection (Gateway Auth -> Service Auth -> DB Access Control).
+- **Least Privilege:** Users/Services only have the minimum access required (e.g., RBAC gating for Admin actions).
+- **Zero Trust:** Every internal request must be authenticated via IST, regardless of source.
 
 ## 🛡️ Internal Service Tokens (IST)
 The system employs a "Gateway-Issued Token" pattern to secure inter-service communication.
@@ -28,3 +39,19 @@ Per our security guidelines, all PII (Personally Identifiable Information) such 
 ## 🔏 Database Security
 - All sensitive data at rest is encrypted via PostgreSQL transparent data encryption (if supported by the host) or application-level encryption for specific fields.
 - Connections use **TLS (rustls)** via SQLx features.
+
+## ☣️ OWASP Top 10 Mitigations
+| Vulnerability | Mitigation in LMS |
+|---------------|-------------------|
+| **Injection** | Using `sqlx` parameterized queries exclusively. |
+| **Broken Access Control** | Centralized `admin_only_middleware` and role-based IST validation. |
+| **Cryptographic Failures** | Enforcement of **Argon2id** for passwords and **RS256** for service tokens. |
+| **Insecure Design** | Explicit ADR-led design process with formal verification in mind. |
+
+## 🔑 Cryptography Standards
+- **Symmetric:** Used for internal data encryption (AES-256-GCM).
+- **Asymmetric:** **RS256** (RSA Signature with SHA-256) for Gateway-to-Service identity propagation.
+- **Hashing:** **Argon2id** for secure password storage, preventing brute-force and GPU acceleration attacks.
+
+---
+*Verified against Sovereign Security Standards.*

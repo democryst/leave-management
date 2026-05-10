@@ -56,9 +56,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let policy_client = Arc::new(PolicyServiceClient::new(
         std::env::var("POLICY_SERVICE_URL").unwrap_or_else(|_| "http://localhost:8083".to_string())
     ));
+    let staff_client = Arc::new(crate::internal::adapters::gateway::staff_client::StaffServiceClient::new(
+        std::env::var("STAFF_SERVICE_URL").unwrap_or_else(|_| "http://localhost:8081".to_string())
+    ));
 
     // 3. Initialize Core Service
-    let leave_service: Arc<dyn LeaveService> = Arc::new(LeaveServiceImpl::new(repo, policy_client));
+    let leave_service: Arc<dyn LeaveService> = Arc::new(LeaveServiceImpl::new(repo, policy_client, staff_client));
 
     // 4. Build Router
     let app = Router::new()

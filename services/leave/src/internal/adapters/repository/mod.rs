@@ -79,6 +79,19 @@ impl LeaveRepository for SqlxLeaveRepository {
         Ok(requests)
     }
 
+    async fn get_pending_by_approver(&self, approver_id: Uuid) -> Result<Vec<LeaveRequest>, String> {
+        let requests = sqlx::query_as::<Postgres, LeaveRequest>(
+            r#"SELECT id, staff_id, leave_type_id, start_date, end_date, status as "status: LeaveStatus", reason, approver_id, created_at 
+               FROM leave_requests WHERE approver_id = $1 AND status = 'Pending' ORDER BY created_at ASC"#
+        )
+        .bind(approver_id)
+        .fetch_all(&self.pool)
+        .await
+        .map_err(|e| e.to_string())?;
+
+        Ok(requests)
+    }
+
     async fn get_balance(&self, staff_id: Uuid, leave_type_id: Uuid) -> Result<Option<LeaveBalance>, String> {
         let balance = sqlx::query_as::<Postgres, LeaveBalance>(
             r#"SELECT staff_id, leave_type_id, balance, accrued_this_year, updated_at 

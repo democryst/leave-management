@@ -58,6 +58,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app = Router::new()
         .route("/health", get(|| async { "Policy Service OK" }))
         .route("/api/v1/policies", get(list_policies))
+        .route("/api/v1/policy/holidays", get(crate::internal::adapters::handler::get_holidays))
+        .route("/api/v1/policy/leave-types/:id", get(crate::internal::adapters::handler::get_policy))
         .with_state(service);
 
     // 4. Start Server

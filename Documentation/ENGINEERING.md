@@ -10,6 +10,8 @@ This document outlines the core engineering principles followed in the developme
 The "science" behind the code ensuring efficiency and scalability:
 - **Data Structures:** Organized data handling (Arrays, Linked Lists, Trees, Hash Maps).
 - **Algorithms:** Logic for problem solving (Sorting, Searching, Big O Notation).
+- **Functional Theory:** [Category Theory & λ-calculus](./theory/FUNCTIONAL.md).
+- **Formal Verification:** [Hoare Logic & Model Checking](./theory/VERIFICATION.md).
 - **Operating Systems:** Low-level memory management, processes, and threading.
 
 ### System Design & Architecture
@@ -24,6 +26,7 @@ A professional process to ensure quality:
 - **Design:** Technical blueprinting (ADRs).
 - **Implementation:** The coding phase.
 - **Testing:** Unit and integration tests to catch bugs early.
+- **Security:** [The CIA Triad & Core Principles](./Security-Architecture.md) integrated into the SDLC.
 - **Deployment & Maintenance:** Continuous operation and monitoring.
 
 ---
@@ -52,6 +55,13 @@ Explaining technical debt and realistic timelines to stakeholders.
 
 > [!TIP]
 > **Engineer's Pro-Tip:** The most expensive code is the code that is hard to read. Always write code for the human who has to maintain it six months from now—that human will likely be you!
+
+---
+
+## 4. Language References
+To support polyglot expansion and maintain architectural standards across different runtimes:
+- [Rust (Primary)](./languages/RUST.md)
+- [Go (Golang)](./languages/GO.md)
 
 ---
 *Derived from Sovereign Engineering Standards.*

@@ -37,3 +37,20 @@ impl Mask for Staff {
         }
     }
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
+pub struct Delegation {
+    pub id: Uuid,
+    pub delegator_id: Uuid,
+    pub delegatee_id: Uuid,
+    pub start_date: chrono::NaiveDate,
+    pub end_date: chrono::NaiveDate,
+    pub is_active: bool,
+    pub created_at: DateTime<Utc>,
+}
+
+impl Mask for Delegation {
+    fn mask(&self) -> Self {
+        self.clone()
+    }
+}

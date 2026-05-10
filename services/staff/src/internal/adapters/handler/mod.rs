@@ -38,3 +38,29 @@ pub async fn get_profile(
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json!({"error": e}))).into_response()
     }
 }
+
+pub async fn get_delegations(
+    State(service): State<Arc<dyn StaffService>>,
+    headers: header::HeaderMap,
+) -> impl IntoResponse {
+    let user_id = headers.get("X-User-Id").and_then(|h| h.to_str().ok());
+    let id = match user_id.and_then(|u| Uuid::parse_str(u).ok()) {
+        Some(u) => u,
+        None => return (StatusCode::UNAUTHORIZED, "Missing identity").into_response(),
+    };
+
+    match service.list_active_delegations(id).await {
+        Ok(delegations) => (StatusCode::OK, Json(serde_json::json!(delegations))).into_response(),
+        Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json!({"error": e}))).into_response()
+    }
+}
+
+pub async fn check_delegation(
+    State(service): State<Arc<dyn StaffService>>,
+    Path((delegatee_id, delegator_id)): Path<(Uuid, Uuid)>,
+) -> impl IntoResponse {
+    match service.check_delegation(delegatee_id, delegator_id).await {
+        Ok(is_active) => (StatusCode::OK, Json(serde_json::json!({"is_active": is_active}))).into_response(),
+        Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json!({"error": e}))).into_response()
+    }
+}

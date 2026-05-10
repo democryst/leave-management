@@ -49,6 +49,12 @@ graph TD
 6. **Leave Service** executes a transactional write to the **Leave DB** (using `BigDecimal` for precision).
 7. **Gateway** returns the response; the entire lifecycle is captured in a single trace viewable in **Jaeger**.
 
+## Service Responsibilities
+- **Staff Service:** Manages employee records, lifecycle, org chart, and **approver delegations**.
+- **Leave Service:** Orchestrates leave lifecycle, approvals, and accruals.
+- **Policy Service:** Manages leave types, blackout dates, and public holidays.
+- **API Gateway:** Handles RBAC enforcement, rate limiting, and edge-to-internal token exchange.
+
 ## Networking & Discovery
 In the orchestrated environment (Docker Compose):
 - **Gateway:** Proxies to `http://staff-service:8081`, `http://leave-service:8082`, etc.

@@ -36,4 +36,26 @@ pub trait LeaveService: Send + Sync {
 pub trait PolicyProvider: Send + Sync {
     /// Verifies if a given leave type ID is valid by calling the Policy Service.
     async fn is_leave_type_valid(&self, leave_type_id: Uuid, token: &str) -> Result<bool, String>;
+    
+    /// Returns the number of public holidays between two dates.
+    async fn get_holiday_count(&self, start: chrono::NaiveDate, end: chrono::NaiveDate, token: &str) -> Result<usize, String>;
+
+    /// Returns the metadata for a specific leave type.
+    async fn get_leave_type_info(&self, leave_type_id: Uuid, token: &str) -> Result<LeaveTypeInfo, String>;
+}
+
+#[derive(serde::Deserialize)]
+pub struct LeaveTypeInfo {
+    pub id: Uuid,
+    pub name: String,
+    pub auto_approve: bool,
+}
+
+#[async_trait]
+pub trait StaffProvider: Send + Sync {
+    /// Checks if a user is an active delegatee for a delegator.
+    async fn is_delegatee_for(&self, delegatee_id: Uuid, delegator_id: Uuid, token: &str) -> Result<bool, String>;
+    
+    /// Returns a list of active delegations for a delegatee.
+    async fn get_active_delegations(&self, delegatee_id: Uuid, token: &str) -> Result<Vec<Uuid>, String>;
 }

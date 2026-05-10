@@ -18,3 +18,4 @@ opentelemetry_sdk = { workspace = true }
 opentelemetry-otlp = { workspace = true }
 tracing-opentelemetry = { workspace = true }
 tower-http = { version = "0.5", features = ["cors", "trace"] }
+serde_urlencoded = "0.7.1"

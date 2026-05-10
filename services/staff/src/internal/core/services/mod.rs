@@ -61,4 +61,16 @@ impl StaffService for StaffServiceImpl {
     async fn terminate_staff(&self, id: Uuid) -> Result<(), String> {
         self.repo.terminate(id).await
     }
+
+    async fn create_delegation(&self, delegation: crate::internal::core::domain::Delegation) -> Result<(), String> {
+        self.repo.save_delegation(delegation).await
+    }
+
+    async fn check_delegation(&self, delegatee_id: Uuid, delegator_id: Uuid) -> Result<bool, String> {
+        self.repo.is_delegatee_for(delegatee_id, delegator_id).await
+    }
+
+    async fn list_active_delegations(&self, delegatee_id: Uuid) -> Result<Vec<crate::internal::core::domain::Delegation>, String> {
+        self.repo.get_active_delegations_for_delegatee(delegatee_id).await
+    }
 }
