@@ -1049,3 +1049,123 @@ Some errors have detailed explanations: E0107, E0282, E0308, E0425, E0432, E0599
 For more information about an error, try `rustc --explain E0107`.
 error: could not compile `gateway` (bin "gateway") due to 10 previous errors
 warning: build failed, waiting for other jobs to finish...
+
+--- 2026-05-10T12:07:00Z ---
+Action: Making Gateway Resilience Configurable
+Verification: cargo check --workspace
+Result: OK
+Commits: pending
+   Compiling sqlx-macros-core v0.8.6
+    Checking gateway v0.1.0 (/Volumes/SSD990PRO2TB/workspace/leave-management/gateway)
+error[E0432]: unresolved import `failsafe::Backoff`
+ --> gateway/src/resilience.rs:9:24
+  |
+9 | use failsafe::{Config, Backoff, failure_policy::ConsecutiveFailures};
+  |                        ^^^^^^^
+  |                        |
+  |                        no `Backoff` in the root
+  |                        help: a similar name exists in the module: `backoff`
+  |
+  = help: consider importing this type alias instead:
+          failsafe::backoff::Backoff
+
+error[E0425]: cannot find type `GenericStateMachine` in crate `failsafe`
+  --> gateway/src/resilience.rs:12:37
+   |
+12 | pub type CircuitBreaker = failsafe::GenericStateMachine<Backoff, ConsecutiveFailures>;
+   |                                     ^^^^^^^^^^^^^^^^^^^ not found in `failsafe`
+
+error[E0782]: expected a type, found a trait
+  --> gateway/src/resilience.rs:11:56
+   |
+11 | pub type SharedRateLimiter = Arc<RateLimiter<NotKeyed, DirectStateStore, governor::clock::DefaultClock>>;
+   |                                                        ^^^^^^^^^^^^^^^^
+   |
+help: you can add the `dyn` keyword if you want a trait object
+   |
+11 | pub type SharedRateLimiter = Arc<RateLimiter<NotKeyed, dyn DirectStateStore, governor::clock::DefaultClock>>;
+   |                                                        +++
+
+error[E0107]: struct takes 0 generic arguments but 1 generic argument was supplied
+   --> gateway/src/resilience.rs:59:11
+    |
+ 59 |     next: Next<B>,
+    |           ^^^^--- help: remove the unnecessary generics
+    |           |
+    |           expected 0 generic arguments
+    |
+note: struct defined here, with 0 generic parameters
+   --> /Volumes/SSD990PRO2TB/RustTools/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.7.9/src/middleware/from_fn.rs:335:12
+    |
+335 | pub struct Next {
+    |            ^^^^
+
+error[E0282]: type annotations needed
+  --> gateway/src/resilience.rs:61:8
+   |
+61 |     if limiter.check().is_ok() {
+   |        ^^^^^^^ cannot infer type
+
+error[E0308]: mismatched types
+   --> gateway/src/resilience.rs:62:18
+    |
+ 56 | pub async fn rate_limit_middleware<B>(
+    |                                    - found this type parameter
+...
+ 62 |         next.run(request).await
+    |              --- ^^^^^^^ expected `Request<Body>`, found `Request<B>`
+    |              |
+    |              arguments to this method are incorrect
+    |
+    = note: expected struct `axum::http::Request<axum::body::Body>`
+               found struct `axum::http::Request<B>`
+note: method defined here
+   --> /Volumes/SSD990PRO2TB/RustTools/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.7.9/src/middleware/from_fn.rs:341:18
+    |
+341 |     pub async fn run(mut self, req: Request) -> Response {
+    |                  ^^^
+
+error[E0282]: type annotations needed for `Result<_, failsafe::Error<_>>`
+   --> gateway/src/main.rs:193:9
+    |
+193 |     let breaker_res = breaker.call(move || async move {
+    |         ^^^^^^^^^^^
+...
+212 |             let status = resp.status().as_u16();
+    |                          ---- type must be known at this point
+    |
+help: consider giving `breaker_res` an explicit type, where the placeholders `_` are specified
+    |
+193 |     let breaker_res: Result<_, failsafe::Error<_>> = breaker.call(move || async move {
+    |                    +++++++++++++++++++++++++++++++
+
+error[E0282]: type annotations needed
+   --> gateway/src/main.rs:213:24
+    |
+213 |             let body = resp.bytes().await.unwrap_or_default();
+    |                        ^^^^^^^^^^^^^^^^^^ cannot infer type
+
+error[E0282]: type annotations needed for `Result<{type error}, failsafe::Error<_>>`
+   --> gateway/src/main.rs:193:9
+    |
+193 |     let breaker_res = breaker.call(move || async move {
+    |         ^^^^^^^^^^^
+...
+218 |         Err(failsafe::Error::Inner(e)) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    |                                                                                           - type must be known at this point
+    |
+help: consider giving `breaker_res` an explicit type, where the placeholders `_` are specified
+    |
+193 |     let breaker_res: Result<_, failsafe::Error<_>> = breaker.call(move || async move {
+    |                    +++++++++++++++++++++++++++++++
+
+error[E0599]: no function or associated item named `new` found for struct `ConsecutiveFailures<BACKOFF>` in the current scope
+  --> gateway/src/resilience.rs:44:50
+   |
+44 |             .failure_policy(ConsecutiveFailures::new(cb_threshold))
+   |                                                  ^^^ function or associated item not found in `ConsecutiveFailures<_>`
+
+Some errors have detailed explanations: E0107, E0282, E0308, E0425, E0432, E0599, E0782.
+For more information about an error, try `rustc --explain E0107`.
+error: could not compile `gateway` (bin "gateway") due to 10 previous errors
+warning: build failed, waiting for other jobs to finish...

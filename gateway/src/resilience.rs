@@ -20,14 +20,29 @@ pub struct ResilienceProvider {
 
 impl ResilienceProvider {
     pub fn new() -> Self {
-        // Rate limit: 100 requests per second
-        let quota = Quota::per_second(std::num::NonZeroU32::new(100).unwrap());
+        // Configurable Rate limit
+        let rate_limit = std::env::var("GATEWAY_RATE_LIMIT_PER_SEC")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or(100);
+        
+        let quota = Quota::per_second(std::num::NonZeroU32::new(rate_limit).unwrap());
         let rate_limiter = Arc::new(RateLimiter::direct(quota));
 
-        // Circuit Breaker: 5 consecutive failures opens for 30s
+        // Configurable Circuit Breaker
+        let cb_threshold = std::env::var("GATEWAY_CB_THRESHOLD")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or(5);
+        
+        let cb_timeout = std::env::var("GATEWAY_CB_TIMEOUT_SECS")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or(30);
+
         let breaker_config = Config::new()
-            .failure_policy(ConsecutiveFailures::new(5))
-            .backoff(Backoff::constant(Duration::from_secs(30)));
+            .failure_policy(ConsecutiveFailures::new(cb_threshold))
+            .backoff(Backoff::constant(Duration::from_secs(cb_timeout)));
 
         Self {
             rate_limiter,
