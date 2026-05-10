@@ -39,3 +39,17 @@
 ## [HASH: f1e2d3a4b5c607891a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f] | [REF: Spec Update] | [2026-05-10T10:34:00Z] | [d1e2f3a4]
 - **Requirement Hardening**: Elevated the system requirements to include Formal Verification targets (FV-1.x through FV-3.x).
 - **Mathematical Integrity**: Synchronized the project goal with the physics of Category Theory and Lean 4 proof modeling.
+## [HASH: be4e26ce6504222629b139535f29910a307040f7d5448378875ee9a69527ec56] | [REF: FR-4.2] | [2026-05-10T11:57:12Z] | [f1e2d3a4]
+- **Delegatee-Aware Authorization**: Implemented cross-service delegation verification via Staff Service.
+- **IST Trust Propagation**: Ensured system-token usage for secure internal service communication.
+- **Domain Decoupling**: Target services remain agnostic of delegation storage implementation.
+
+## [HASH: 95536555cc5f9c46114eb130e46101235122557555cc5e6149176378e994e637] | [REF: FR-4.1] | [2026-05-10T11:57:12Z] | [be4e26ce]
+- **Policy-Driven State Transitions**: Integrated Policy Service metadata to trigger immediate state changes (e.g., Auto-Approval).
+- **System Actor Logic**: Utilized `Uuid::nil()` to designate automated system actions in audit trails.
+- **Workflow Elasticity**: Decoupled business rules (Policy) from state machine execution (Workflow).
+
+## [HASH: ab1f435d8e7e10882e3794356a59276c1f10c57655cc5e6149176378e994e637] | [REF: FR-4.3] | [2026-05-10T11:57:12Z] | [95536555]
+- **Holiday-Aware Duration Engine**: Integrated dynamic holiday lookup from Policy Service into core duration math.
+- **Regulatory Precision**: Excludes public holidays and weekends from leave balance deductions to ensure legal compliance.
+- **IST Gating**: Hardened the Duration calculation with mandatory inter-service rule validation.

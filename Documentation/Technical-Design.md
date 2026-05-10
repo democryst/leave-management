@@ -18,14 +18,17 @@ sequenceDiagram
     GW->>LV: POST /api/v1/leave/requests (IST + Identity Headers)
     
     Note over LV: LeaveApplicationService Execution
-    LV->>PL: GET /api/v1/policies (IST)
-    PL-->>LV: Valid Policy Data
+    LV->>PL: GET /api/v1/policy/leave-types/:id (IST)
+    PL-->>LV: Policy Metadata (auto_approve flag)
+    LV->>PL: GET /api/v1/policy/holidays?start=X&end=Y (IST)
+    PL-->>LV: Holiday List
     
     LV->>DB: BEGIN Transaction
-    LV->>DB: Check Balance (SQL Query)
+    LV->>DB: Check Balance (SQL Query, excluding holidays)
     alt Sufficient Balance
         LV->>DB: Insert Leave Request
-        LV->>DB: Update Balance (Subtract Days)
+        Note over LV: If auto_approve=true: status=Approved, approver=System
+        LV->>DB: Update Balance (Subtract Net Days)
         LV->>DB: COMMIT
         LV-->>GW: 201 Created
         GW-->>UI: Success Notification
@@ -35,6 +38,23 @@ sequenceDiagram
         GW-->>UI: Error: Insufficient Balance
     end
 ```
+
+## 🧠 Business Rules Gating
+
+### 1. Auto-Approval (FR-4.1)
+The system supports policy-defined automated approvals.
+- **Trigger:** Configured at the `LeaveType` level in the Policy Service.
+- **Actor:** Recorded as `Uuid::nil()` (System User).
+- **Effect:** Skips the manager approval queue and immediately deducts balance.
+
+### 2. Holiday-Aware Duration (FR-4.3)
+Duration calculation logic is offloaded to the core domain but depends on the Policy Service for source data.
+- **Logic:** `NetDays = TotalDays - Weekends - PublicHolidays`.
+- **Source:** Public holidays are dynamic and region-specific, managed in the `Policy Service`.
+
+### 3. Approver Delegation (FR-4.2)
+- **Check:** Before permitting an approval, the Leave Service queries the Staff Service to verify if the actor is either the designated manager or an active delegatee.
+- **IST Usage:** Uses a `system-token` for the delegation check to ensure high-priority access.
 
 ## 🏗️ Architecture: Hexagonal Pattern
 Each service is partitioned into:

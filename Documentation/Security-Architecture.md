@@ -10,6 +10,7 @@ Every security measure in the Leave Management System is designed to protect one
 - **Defense in Depth:** Multiple layers of protection (Gateway Auth -> Service Auth -> DB Access Control).
 - **Least Privilege:** Users/Services only have the minimum access required (e.g., RBAC gating for Admin actions).
 - **Zero Trust:** Every internal request must be authenticated via IST, regardless of source.
+- **Delegatee-Aware Authorization:** In scenarios where a user acts "on behalf of" another (e.g., Approver Delegation), the target service must verify the relationship through a centralized identity check. The system uses a dedicated `system-token` to query the Delegation Registry, preventing permission circularity.
 
 ## 🛡️ Internal Service Tokens (IST)
 The system employs a "Gateway-Issued Token" pattern to secure inter-service communication.

@@ -30,10 +30,35 @@ Rust eliminates manual memory management pitfalls (leaks, double-frees) without 
 | **Memory** | Garbage Collector | Ownership (No GC) |
 | **Concurrency** | Goroutines/Channels | Threads/Async (Race-free) |
 
-## 5. Why We Use Rust for LMS
-- **Reliability:** The compiler prevents the most expensive bugs before deployment.
-- **Performance:** Critical for our HR logic and precision math (`BigDecimal`).
-- **Safety:** Ensuring PII (Staff data) is handled without risk of memory exploits.
+## 6. Implementation Patterns in LMS
+
+### API Gateway Query Forwarding
+When proxying requests with query parameters (e.g., holiday lookups), use `serde_urlencoded` to rebuild the query string from the extracted `serde_json::Value`.
+
+```rust
+async fn proxy_handler(
+    State(state): State<Arc<AppState>>,
+    axum::extract::Query(query): axum::extract::Query<serde_json::Value>,
+) -> impl IntoResponse {
+    let mut url = format!("{}/api/v1/resource", state.service_url);
+    if let Ok(query_str) = serde_urlencoded::to_string(&query) {
+        if !query_str.is_empty() {
+            url = format!("{}?{}", url, query_str);
+        }
+    }
+    // ... forward request
+}
+```
+
+### System Actor Pattern
+For automated state transitions (like Auto-Approval), use `Uuid::nil()` to signify the "System" as the actor in audit logs. This distinguishes automated actions from manual ones while maintaining type safety.
+
+```rust
+if policy.auto_approve {
+    request.status = LeaveStatus::Approved;
+    request.approver_id = Some(Uuid::nil()); // System User
+}
+```
 
 ---
 *Primary backend language for the Leave Management System.*
