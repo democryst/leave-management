@@ -1,4 +1,4 @@
-# CLAUDE.md — Autonomous Agentic SDLC for Rust Hexagonal Architecture
+# CLAUDE.md — Autonomous Agentic SDLC (Language-Agnostic)
 
 ## 🎯 Role: Autonomous Agentic Commander
 
@@ -34,7 +34,7 @@ Context windows are finite. When exhausted:
 
 Break every goal into units that can each be completed in **≤5 tool calls**. After each unit:
 
-1. **Verify** — Run `cargo check` or equivalent.
+1. **Verify** — Run the project's build/check command (see §Project Config).
 2. **Checkpoint** — Update `task.md` with `[x]` for completed items.
 3. **Commit** — `git commit` with a conventional commit message.
 
@@ -64,7 +64,7 @@ Instead of keeping context in-conversation, write it to files:
 
 - **Never echo back** file contents you just wrote or read.
 - **Never repeat** the user's request back to them.
-- **Never list** all warnings from `cargo check` — only list **errors**.
+- **Never list** all warnings from build output — only list **errors**.
 - **Summarize** `git diff` output, don't paste it.
 - **One-line confirmation** for simple operations (commit, file create, etc.).
 
@@ -92,40 +92,57 @@ Instead of keeping context in-conversation, write it to files:
 
 ## 🔄 SDLC Phase Overview
 
-| Phase    | Deliverables                    | Gate (Exit Criteria)                                     |
-| -------- | ------------------------------- | -------------------------------------------------------- |
-| `/spec`  | `spec/requirements.md`          | Stakeholder sign-off on scope & security impact          |
-| `/plan`  | `plan/roadmap.md`, Risk Reg     | Estimated timeline approved, dependencies mapped         |
-| `/tech`  | `tech/adr-NNN.md`, `tech/design.md` | ADR written, Layer rules respected, diagrams reviewed |
-| `/code`  | Source Code, Migrations         | `cargo check` passes, no layer leakage                   |
-| `/test`  | Unit/Integration Tests, Audit   | `cargo test` passes, zero P0/P1 bugs                     |
-| `/docs`  | Manuals, Runbook, Changelog     | README/API docs updated, Runbook reviewed                |
+| Phase    | Deliverables                         | Gate (Exit Criteria)                                     |
+| -------- | ------------------------------------ | -------------------------------------------------------- |
+| `/spec`  | `spec/requirements.md`              | Stakeholder sign-off on scope & security impact          |
+| `/plan`  | `plan/roadmap.md`, Risk Reg         | Estimated timeline approved, dependencies mapped         |
+| `/tech`  | `tech/adr-NNN.md`, `tech/design.md` | ADR written, Layer rules respected, diagrams reviewed    |
+| `/code`  | Source Code, Migrations              | Build passes, no layer leakage                           |
+| `/test`  | Unit/Integration Tests, Audit        | Tests pass, zero P0/P1 bugs                              |
+| `/docs`  | Manuals, Runbook, Changelog          | README/API docs updated, Runbook reviewed                |
 
 ---
 
-## 📂 Layer Rules & Boundaries (Hexagonal Architecture)
+## 📂 Layer Rules & Boundaries (Clean / Hexagonal Architecture)
 
-| Layer | Path | Responsibility | Standards |
-|-------|------|----------------|-----------|
-| Entry | `services/*/src/main.rs` | DI & Wiring | **No business logic** |
-| Domain | `internal/core/domain/` | Entities & Errors | **PII masking mandatory** |
-| Ports | `internal/core/ports/` | Traits | **`#[async_trait]`** |
-| Services | `internal/core/services/` | Business Logic | **Atomic transactions** |
-| Handlers | `internal/adapters/handler/` | REST/Consumers | **DTO Validation required** |
-| Repository | `internal/adapters/repository/` | Persistence | **SQLx (Prepared Stmts)** |
-| Gateway | `internal/adapters/gateway/` | External Clients | **Reqwest + OTel + TLS** |
+> These rules apply regardless of language. Adapt paths to the project's convention (see §Project Config).
+
+| Layer | Responsibility | Standards |
+|-------|----------------|-----------|
+| **Entry** | DI & Wiring (main, bootstrap) | **No business logic** |
+| **Domain** | Entities, Value Objects, Errors | **PII masking mandatory**, no framework imports |
+| **Ports** | Interfaces / Traits / Protocols | **Async-safe**, defined in Core |
+| **Services** | Business Logic & Orchestration | **Atomic transactions**, no direct DB/HTTP calls |
+| **Handlers** | REST/gRPC/CLI Controllers | **DTO Validation required** before entering Core |
+| **Repository** | Persistence Adapters | **Prepared statements**, no raw string SQL |
+| **Gateway** | External Service Clients | **Timeout + Retry + TLS**, observability headers |
+
+> **The Iron Rule:** Core (Domain + Ports + Services) must **never** import from Adapters (Handlers + Repository + Gateway).
 
 ---
 
-## 📚 Library Lockdown (Rust)
+## 📚 Library & Toolchain Policy
 
-| Category | Approved Libraries |
-|----------|-------------------|
-| Router | `axum 0.7` |
-| Database | `sqlx 0.8` (Postgres) |
-| Precision | `bigdecimal` |
-| Telemetry | `otel` / `tracing` |
-| Testing | `tokio::test` |
+> Do NOT use libraries outside the approved set without explicit human approval. Check `go.mod`, `Cargo.toml`, `package.json`, or equivalent before adding anything.
+
+### Language Detection
+
+On first interaction, detect the project language(s) from:
+1. Manifest files: `Cargo.toml` → Rust, `go.mod` → Go, `package.json` → JS/TS, `pyproject.toml`/`requirements.txt` → Python, `pom.xml`/`build.gradle` → Java/Kotlin
+2. File extensions in `src/` or project root
+3. Existing CI config (`.github/workflows/`, `Makefile`, etc.)
+
+### Per-Language Conventions
+
+| Concern | Rust | Go | TypeScript/JS | Python |
+|---------|------|----|---------------|--------|
+| **Build Check** | `cargo check` | `go build ./...` | `tsc --noEmit` or `npm run build` | `mypy .` or `python -m py_compile` |
+| **Test** | `cargo test` | `go test ./...` | `npm test` / `vitest` | `pytest` |
+| **Lint** | `clippy` | `golangci-lint` | `eslint` | `ruff` / `flake8` |
+| **Format** | `cargo fmt` | `gofmt` | `prettier` | `black` / `ruff format` |
+| **Dependency Add** | `cargo add <pkg>` | `go get <pkg>` | `npm install <pkg>` | `pip install <pkg>` |
+| **Interface Pattern** | `trait` | `interface` | `interface` / `abstract class` | `Protocol` / `ABC` |
+| **Async Pattern** | `async fn` + `tokio` | goroutines + channels | `async/await` + Promises | `async def` + `asyncio` |
 
 ---
 
@@ -133,9 +150,10 @@ Instead of keeping context in-conversation, write it to files:
 
 1. **Phase Awareness:** State the SDLC phase before output.
 2. **Hypothesis First:** "I believe X because Y."
-3. **Plan Before Code:** Output a `<plan>` identifying Ports, Domain, Logic, Wiring, and Security.
+3. **Plan Before Code:** Output a `<plan>` identifying Domain, Ports, Logic, Wiring, and Security Impact.
 4. **Deliverable Check:** Verify gate criteria before phase transition.
 5. **Self-Audit:** Activate **The Auditor** persona before delivering.
+6. **Language Awareness:** Use idioms native to the project's language. Don't write "Pythonic Go" or "Rusty JavaScript."
 
 ---
 
@@ -145,6 +163,38 @@ Instead of keeping context in-conversation, write it to files:
 - **No Layer Leakage** (Adapters must never be imported into Core).
 - **No Unvalidated Input** (Always use validated DTOs).
 - **No Hardcoded Secrets.**
+- **No Phantom Libraries** — never use a library not in the project's dependency manifest without approval.
 - **No Full-File Dumps** in responses (summarize, don't echo).
 - **No Unbounded Loops** — max 3 self-correction attempts per error.
 - **No Context Hoarding** — offload state to `task.md`/`skill.md`, not conversation memory.
+
+---
+
+## 🏗️ Project Config (This Repository)
+
+> This section is project-specific. Update it when the tech stack changes.
+
+| Key | Value |
+|-----|-------|
+| **Primary Language** | Rust |
+| **Architecture** | Hexagonal (Ports & Adapters) |
+| **Build Check** | `cargo check` |
+| **Test** | `cargo test` |
+| **Entry Points** | `services/*/src/main.rs` |
+| **Domain Path** | `internal/core/domain/` |
+| **Ports Path** | `internal/core/ports/` |
+| **Services Path** | `internal/core/services/` |
+| **Handlers Path** | `internal/adapters/handler/` |
+| **Repository Path** | `internal/adapters/repository/` |
+| **Gateway Path** | `internal/adapters/gateway/` |
+
+### Approved Libraries (Rust)
+
+| Category | Library |
+|----------|---------|
+| Router | `axum 0.7` |
+| Database | `sqlx 0.8` (Postgres) |
+| Precision | `bigdecimal` |
+| Telemetry | `opentelemetry` / `tracing` |
+| Testing | `tokio::test` |
+| HTTP Client | `reqwest` |
