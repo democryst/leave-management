@@ -10,7 +10,17 @@
 4. **Unified Observability:** OTel `trace_id` is the common thread required in all localized manuals to ensure cross-service visibility.
 **Gotcha:** Supervisor must audit inter-service contracts (gRPC/REST) early in the `/tech` phase to prevent breaking changes during parallel agent execution.
 
-## [HASH: 6cff285d20a1b54622521fb8a854e3cc235ad2d1a8523344f3868aca3264397e] | [REF: CLAUDE.md v7.0] | 2026-05-10 | [PARENT: Distributed PII Masking]
+## [HASH: aba76f3004c605c401c4c14e979ac4f19d6db2d8fddb45793685304f1d8d1bd4] | [REF: CLAUDE.md v8.0] | 2026-05-10 | [PARENT: f1e2d3a4]
+### [Procedural] — Sovereign Agentic Commander Protocol
+**Institutionalized:** 2026-05-10
+**Context:** Upgrading the agentic workflow to v8.0 standards for high-autonomy engineering.
+**Pattern:**
+1. **Sovereignty**: Zero-Trust/Zero-Magic paradigm. All operations are local-first.
+2. **XFV (Execution Fact Verification)**: Mandatory terminal proof in `5_EXECUTION_LOG.txt`.
+3. **KHP (Knowledge Hash Protocol)**: Insights are hashed and linked in `INTERNAL/SKILLS.md`.
+4. **CWSP**: Context Window Survival Protocol for token efficiency.
+
+## [HASH: be4e26ce6504222629b139535f29910a307040f7d5448378875ee9a69527ec56] | [REF: FR-4.2] | 2026-05-10 | [PARENT: aba76f30]
 ## [Architectural] — Delegatee-Aware Authorization
 **Discovered:** 2026-05-10
 **Context:** Cross-service authorization where one user acts on behalf of another (Delegation).

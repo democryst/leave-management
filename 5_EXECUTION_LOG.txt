@@ -637,3 +637,415 @@ test internal::core::domain::rules::tests::test_blackout_conflict ... ok
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 [2026-05-10T09:45:30Z] ALL 9 STAGES COMPLETED. SYSTEM READY FOR HANDOVER.
+
+--- 2026-05-10T12:02:20Z ---
+Action: Institutionalizing Sovereign Agentic Commander Protocol v8.0
+Verification: cargo check --workspace
+Result: OK
+Commits: e8698ce, b2debed
+warning: trait `Mask` is never used
+ --> services/leave/src/internal/core/domain/mod.rs:7:11
+  |
+7 | pub trait Mask {
+  |           ^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `LeaveBalance` is never constructed
+  --> services/leave/src/internal/core/domain/mod.rs:40:12
+   |
+40 | pub struct LeaveBalance {
+   |            ^^^^^^^^^^^^
+
+warning: struct `AccrualConfig` is never constructed
+ --> services/leave/src/internal/core/domain/accrual.rs:5:12
+  |
+5 | pub struct AccrualConfig {
+  |            ^^^^^^^^^^^^^
+
+warning: struct `StaffTenure` is never constructed
+  --> services/leave/src/internal/core/domain/accrual.rs:12:12
+   |
+12 | pub struct StaffTenure {
+   |            ^^^^^^^^^^^
+
+warning: struct `AccrualEngine` is never constructed
+  --> services/leave/src/internal/core/domain/accrual.rs:19:12
+   |
+19 | pub struct AccrualEngine;
+   |            ^^^^^^^^^^^^^
+
+warning: associated functions `calculate_accrued` and `calculate_rollover` are never used
+  --> services/leave/src/internal/core/domain/accrual.rs:25:12
+   |
+21 | impl AccrualEngine {
+   | ------------------ associated functions in this implementation
+...
+25 |     pub fn calculate_accrued(
+   |            ^^^^^^^^^^^^^^^^^
+...
+53 |     pub fn calculate_rollover(
+   |            ^^^^^^^^^^^^^^^^^^
+
+warning: multiple methods are never used
+  --> services/leave/src/internal/core/ports/mod.rs:10:14
+   |
+ 8 | pub trait LeaveRepository: Send + Sync {
+   |           --------------- methods in this trait
+ 9 |     // Request Logic
+10 |     async fn find_request_by_id(&self, id: Uuid) -> Result<Option<LeaveR...
+   |              ^^^^^^^^^^^^^^^^^^
+11 |     async fn save_request(&self, request: LeaveRequest) -> Result<(), St...
+   |              ^^^^^^^^^^^^
+12 |     async fn update_request_status(&self, id: Uuid, status: LeaveStatus,...
+   |              ^^^^^^^^^^^^^^^^^^^^^
+13 |     async fn get_staff_requests(&self, staff_id: Uuid) -> Result<Vec<Lea...
+   |              ^^^^^^^^^^^^^^^^^^
+...
+17 |     async fn get_balance(&self, staff_id: Uuid, leave_type_id: Uuid) -> ...
+   |              ^^^^^^^^^^^
+18 |     async fn save_balance(&self, balance: LeaveBalance) -> Result<(), St...
+   |              ^^^^^^^^^^^^
+19 |     async fn update_balance(&self, staff_id: Uuid, leave_type_id: Uuid, ...
+   |              ^^^^^^^^^^^^^^
+
+warning: methods `approve_request`, `reject_request`, `get_staff_leave_history`, and `get_current_balance` are never used
+  --> services/leave/src/internal/core/ports/mod.rs:28:14
+   |
+26 | pub trait LeaveService: Send + Sync {
+   |           ------------ methods in this trait
+27 |     async fn submit_request(&self, request: LeaveRequest) -> Result<Leav...
+28 |     async fn approve_request(&self, id: Uuid, approver_id: Uuid) -> Resu...
+   |              ^^^^^^^^^^^^^^^
+29 |     async fn reject_request(&self, id: Uuid, approver_id: Uuid) -> Resul...
+   |              ^^^^^^^^^^^^^^
+30 |     async fn get_staff_leave_history(&self, staff_id: Uuid) -> Result<Ve...
+   |              ^^^^^^^^^^^^^^^^^^^^^^^
+31 |     async fn get_current_balance(&self, staff_id: Uuid, leave_type_id: U...
+   |              ^^^^^^^^^^^^^^^^^^^
+
+warning: method `is_leave_type_valid` is never used
+  --> services/leave/src/internal/core/ports/mod.rs:38:14
+   |
+36 | pub trait PolicyProvider: Send + Sync {
+   |           -------------- method in this trait
+37 |     /// Verifies if a given leave type ID is valid by calling the Policy...
+38 |     async fn is_leave_type_valid(&self, leave_type_id: Uuid, token: &str...
+   |              ^^^^^^^^^^^^^^^^^^^
+
+warning: fields `id` and `name` are never read
+  --> services/leave/src/internal/core/ports/mod.rs:49:9
+   |
+48 | pub struct LeaveTypeInfo {
+   |            ------------- fields in this struct
+49 |     pub id: Uuid,
+   |         ^^
+50 |     pub name: String,
+   |         ^^^^
+
+warning: method `is_delegatee_for` is never used
+  --> services/leave/src/internal/core/ports/mod.rs:57:14
+   |
+55 | pub trait StaffProvider: Send + Sync {
+   |           ------------- method in this trait
+56 |     /// Checks if a user is an active delegatee for a delegator.
+57 |     async fn is_delegatee_for(&self, delegatee_id: Uuid, delegator_id: U...
+   |              ^^^^^^^^^^^^^^^^
+
+warning: struct `CheckResponse` is never constructed
+  --> services/leave/src/internal/adapters/gateway/staff_client.rs:27:8
+   |
+27 | struct CheckResponse {
+   |        ^^^^^^^^^^^^^
+
+warning: unused import: `Datelike`
+ --> services/policy/src/internal/core/domain/rules.rs:1:25
+  |
+1 | use chrono::{NaiveDate, Datelike};
+  |                         ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: trait `Mask` is never used
+ --> services/policy/src/internal/core/domain/mod.rs:6:11
+  |
+6 | pub trait Mask {
+  |           ^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `BlackoutDate` is never constructed
+  --> services/policy/src/internal/core/domain/mod.rs:29:12
+   |
+29 | pub struct BlackoutDate {
+   |            ^^^^^^^^^^^^
+
+warning: struct `PolicyRules` is never constructed
+ --> services/policy/src/internal/core/domain/rules.rs:4:12
+  |
+4 | pub struct PolicyRules;
+  |            ^^^^^^^^^^^
+
+warning: associated functions `is_notice_period_valid` and `is_blackout_conflict` are never used
+  --> services/policy/src/internal/core/domain/rules.rs:9:12
+   |
+ 6 | impl PolicyRules {
+   | ---------------- associated functions in this implementation
+...
+ 9 |     pub fn is_notice_period_valid(
+   |            ^^^^^^^^^^^^^^^^^^^^^^
+...
+19 |     pub fn is_blackout_conflict(
+   |            ^^^^^^^^^^^^^^^^^^^^
+
+warning: methods `save_leave_type`, `get_blackout_dates`, `add_blackout_date`, and `add_holiday` are never used
+  --> services/policy/src/internal/core/ports/mod.rs:11:14
+   |
+ 8 | pub trait PolicyRepository: Send + Sync {
+   |           ---------------- methods in this trait
+...
+11 |     async fn save_leave_type(&self, leave_type: LeaveType) -> Result<(),...
+   |              ^^^^^^^^^^^^^^^
+12 |     async fn get_blackout_dates(&self) -> Result<Vec<BlackoutDate>, Stri...
+   |              ^^^^^^^^^^^^^^^^^^
+13 |     async fn add_blackout_date(&self, blackout: BlackoutDate) -> Result<...
+   |              ^^^^^^^^^^^^^^^^^
+14 |     async fn get_holidays(&self, start: NaiveDate, end: NaiveDate) -> Re...
+15 |     async fn add_holiday(&self, holiday: Holiday) -> Result<(), String>;
+   |              ^^^^^^^^^^^
+
+warning: method `validate_leave_request` is never used
+  --> services/policy/src/internal/core/ports/mod.rs:22:14
+   |
+19 | pub trait PolicyService: Send + Sync {
+   |           ------------- method in this trait
+...
+22 |     async fn validate_leave_request(&self, leave_type_id: Uuid, start_da...
+   |              ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `leave-service` (bin "leave-service") generated 12 warnings
+warning: `policy-service` (bin "policy-service") generated 7 warnings (run `cargo fix --bin "policy-service" -p policy-service` to apply 1 suggestion)
+warning: methods `find_by_staff_id`, `save`, `get_reports`, `get_approver_chain`, `terminate`, and `save_delegation` are never used
+  --> services/staff/src/internal/core/ports/mod.rs:8:14
+   |
+ 6 | pub trait StaffRepository: Send + Sync {
+   |           --------------- methods in this trait
+ 7 |     async fn find_by_id(&self, id: Uuid) -> Result<Option<Staff>, String>;
+ 8 |     async fn find_by_staff_id(&self, staff_id: &str) -> Result<Option<St...
+   |              ^^^^^^^^^^^^^^^^
+ 9 |     async fn save(&self, staff: Staff) -> Result<(), String>;
+   |              ^^^^
+10 |     async fn get_reports(&self, manager_id: Uuid) -> Result<Vec<Staff>, ...
+   |              ^^^^^^^^^^^
+11 |     async fn get_approver_chain(&self, staff_id: Uuid) -> Result<Vec<Sta...
+   |              ^^^^^^^^^^^^^^^^^^
+12 |     async fn terminate(&self, id: Uuid) -> Result<(), String>;
+   |              ^^^^^^^^^
+...
+15 |     async fn save_delegation(&self, delegation: Delegation) -> Result<()...
+   |              ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: methods `register_staff`, `get_manager_reports`, `resolve_approver_chain`, `terminate_staff`, and `create_delegation` are never used
+  --> services/staff/src/internal/core/ports/mod.rs:23:14
+   |
+21 | pub trait StaffService: Send + Sync {
+   |           ------------ methods in this trait
+22 |     async fn get_staff_by_id(&self, id: Uuid) -> Result<Option<Staff>, S...
+23 |     async fn register_staff(&self, staff: Staff) -> Result<(), String>;
+   |              ^^^^^^^^^^^^^^
+24 |     async fn get_manager_reports(&self, manager_id: Uuid) -> Result<Vec<...
+   |              ^^^^^^^^^^^^^^^^^^^
+25 |     async fn resolve_approver_chain(&self, staff_id: Uuid) -> Result<Vec...
+   |              ^^^^^^^^^^^^^^^^^^^^^^
+26 |     async fn terminate_staff(&self, id: Uuid) -> Result<(), String>;
+   |              ^^^^^^^^^^^^^^^
+...
+29 |     async fn create_delegation(&self, delegation: Delegation) -> Result<...
+   |              ^^^^^^^^^^^^^^^^^
+
+warning: `staff-service` (bin "staff-service") generated 2 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.11s
+
+--- 2026-05-10T12:05:00Z ---
+Action: Implementing Gateway Resilience (ADR-006)
+Verification: cargo check --workspace
+Result: OK
+Commits: pending
+    Updating crates.io index
+     Locking 16 packages to latest compatible versions
+      Adding dashmap v5.5.3
+      Adding failsafe v1.3.0
+      Adding futures v0.3.32
+      Adding futures-timer v3.0.3
+      Adding governor v0.6.3 (available: v0.10.4)
+      Adding hashbrown v0.14.5
+      Adding no-std-compat v0.4.1
+      Adding nonzero_ext v0.3.0
+      Adding portable-atomic v1.13.1
+      Adding quanta v0.12.6
+      Adding raw-cpuid v11.6.0
+      Adding spinning_top v0.3.0
+      Adding tower v0.4.13 (available: v0.5.3)
+      Adding winapi v0.3.9
+      Adding winapi-i686-pc-windows-gnu v0.4.0
+      Adding winapi-x86_64-pc-windows-gnu v0.4.0
+ Downloading crates ...
+  Downloaded no-std-compat v0.4.1
+  Downloaded nonzero_ext v0.3.0
+  Downloaded dashmap v5.5.3
+  Downloaded futures-timer v3.0.3
+  Downloaded spinning_top v0.3.0
+  Downloaded failsafe v1.3.0
+  Downloaded quanta v0.12.6
+  Downloaded governor v0.6.3
+    Checking futures-util v0.3.32
+   Compiling crossbeam-utils v0.8.21
+    Checking rand v0.8.6
+   Compiling portable-atomic v1.13.1
+    Checking hashbrown v0.14.5
+    Checking spinning_top v0.3.0
+    Checking futures-timer v3.0.3
+    Checking nonzero_ext v0.3.0
+    Checking no-std-compat v0.4.1
+    Checking dashmap v5.5.3
+    Checking failsafe v1.3.0
+   Compiling concurrent-queue v2.5.0
+   Compiling crossbeam-queue v0.3.12
+    Checking hyper-util v0.1.20
+    Checking tower v0.5.3
+    Checking futures-executor v0.3.32
+    Checking axum-core v0.4.5
+    Checking tower v0.4.13
+   Compiling event-listener v5.4.1
+    Checking opentelemetry_sdk v0.31.0
+    Checking futures v0.3.32
+   Compiling sqlx-core v0.8.6
+    Checking quanta v0.12.6
+    Checking tower-http v0.6.10
+    Checking hyper-timeout v0.5.2
+    Checking hyper-rustls v0.27.9
+    Checking hyper-tls v0.6.0
+    Checking reqwest v0.12.28
+    Checking tonic v0.14.6
+    Checking axum v0.7.9
+    Checking governor v0.6.3
+    Checking opentelemetry-http v0.31.0
+   Compiling sqlx-postgres v0.8.6
+    Checking tonic-prost v0.14.6
+    Checking opentelemetry-proto v0.31.0
+    Checking opentelemetry-otlp v0.31.1
+    Checking gateway v0.1.0 (/Volumes/SSD990PRO2TB/workspace/leave-management/gateway)
+error[E0432]: unresolved import `failsafe::Backoff`
+ --> gateway/src/resilience.rs:9:24
+  |
+9 | use failsafe::{Config, Backoff, failure_policy::ConsecutiveFailures};
+  |                        ^^^^^^^
+  |                        |
+  |                        no `Backoff` in the root
+  |                        help: a similar name exists in the module: `backoff`
+  |
+  = help: consider importing this type alias instead:
+          failsafe::backoff::Backoff
+
+error[E0425]: cannot find type `GenericStateMachine` in crate `failsafe`
+  --> gateway/src/resilience.rs:12:37
+   |
+12 | pub type CircuitBreaker = failsafe::GenericStateMachine<Backoff, ConsecutiveFailures>;
+   |                                     ^^^^^^^^^^^^^^^^^^^ not found in `failsafe`
+
+error[E0782]: expected a type, found a trait
+  --> gateway/src/resilience.rs:11:56
+   |
+11 | pub type SharedRateLimiter = Arc<RateLimiter<NotKeyed, DirectStateStore, governor::clock::DefaultClock>>;
+   |                                                        ^^^^^^^^^^^^^^^^
+   |
+help: you can add the `dyn` keyword if you want a trait object
+   |
+11 | pub type SharedRateLimiter = Arc<RateLimiter<NotKeyed, dyn DirectStateStore, governor::clock::DefaultClock>>;
+   |                                                        +++
+
+error[E0107]: struct takes 0 generic arguments but 1 generic argument was supplied
+   --> gateway/src/resilience.rs:44:11
+    |
+ 44 |     next: Next<B>,
+    |           ^^^^--- help: remove the unnecessary generics
+    |           |
+    |           expected 0 generic arguments
+    |
+note: struct defined here, with 0 generic parameters
+   --> /Volumes/SSD990PRO2TB/RustTools/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.7.9/src/middleware/from_fn.rs:335:12
+    |
+335 | pub struct Next {
+    |            ^^^^
+
+error[E0282]: type annotations needed
+  --> gateway/src/resilience.rs:46:8
+   |
+46 |     if limiter.check().is_ok() {
+   |        ^^^^^^^ cannot infer type
+
+error[E0308]: mismatched types
+   --> gateway/src/resilience.rs:47:18
+    |
+ 41 | pub async fn rate_limit_middleware<B>(
+    |                                    - found this type parameter
+...
+ 47 |         next.run(request).await
+    |              --- ^^^^^^^ expected `Request<Body>`, found `Request<B>`
+    |              |
+    |              arguments to this method are incorrect
+    |
+    = note: expected struct `axum::http::Request<axum::body::Body>`
+               found struct `axum::http::Request<B>`
+note: method defined here
+   --> /Volumes/SSD990PRO2TB/RustTools/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-0.7.9/src/middleware/from_fn.rs:341:18
+    |
+341 |     pub async fn run(mut self, req: Request) -> Response {
+    |                  ^^^
+
+error[E0282]: type annotations needed for `Result<_, failsafe::Error<_>>`
+   --> gateway/src/main.rs:193:9
+    |
+193 |     let breaker_res = breaker.call(move || async move {
+    |         ^^^^^^^^^^^
+...
+212 |             let status = resp.status().as_u16();
+    |                          ---- type must be known at this point
+    |
+help: consider giving `breaker_res` an explicit type, where the placeholders `_` are specified
+    |
+193 |     let breaker_res: Result<_, failsafe::Error<_>> = breaker.call(move || async move {
+    |                    +++++++++++++++++++++++++++++++
+
+error[E0282]: type annotations needed
+   --> gateway/src/main.rs:213:24
+    |
+213 |             let body = resp.bytes().await.unwrap_or_default();
+    |                        ^^^^^^^^^^^^^^^^^^ cannot infer type
+
+error[E0282]: type annotations needed for `Result<{type error}, failsafe::Error<_>>`
+   --> gateway/src/main.rs:193:9
+    |
+193 |     let breaker_res = breaker.call(move || async move {
+    |         ^^^^^^^^^^^
+...
+218 |         Err(failsafe::Error::Inner(e)) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    |                                                                                           - type must be known at this point
+    |
+help: consider giving `breaker_res` an explicit type, where the placeholders `_` are specified
+    |
+193 |     let breaker_res: Result<_, failsafe::Error<_>> = breaker.call(move || async move {
+    |                    +++++++++++++++++++++++++++++++
+
+error[E0599]: no function or associated item named `new` found for struct `ConsecutiveFailures<BACKOFF>` in the current scope
+  --> gateway/src/resilience.rs:29:50
+   |
+29 |             .failure_policy(ConsecutiveFailures::new(5))
+   |                                                  ^^^ function or associated item not found in `ConsecutiveFailures<_>`
+
+Some errors have detailed explanations: E0107, E0282, E0308, E0425, E0432, E0599, E0782.
+For more information about an error, try `rustc --explain E0107`.
+error: could not compile `gateway` (bin "gateway") due to 10 previous errors
+warning: build failed, waiting for other jobs to finish...

@@ -1,5 +1,11 @@
 # Software Engineering Principles & Philosophy
 
+### 4. Resilience & Sovereignty (v8.0)
+- **Zero-Magic**: Every operation is explicit, planned, and verified.
+- **Local-First**: The codebase and its vault are the source of truth; zero reliance on transient cloud context.
+- **XFV (Execution Fact Verification)**: No change is considered complete without physical terminal proof recorded in the execution log.
+- **KHP (Knowledge Hash Protocol)**: Insights are hashed and linked to maintain an immutable chain of procedural memory.
+
 This document outlines the core engineering principles followed in the development of the Leave Management System. It serves as a guide for maintainers and a foundation for the system's architecture.
 
 ---
@@ -39,6 +45,11 @@ A professional process to ensure quality:
 | **Backend** | Rust (Axum) | The logic, server, and "brain" of the app. |
 | **Database** | PostgreSQL | Permanent, relational data storage. |
 | **DevOps** | Docker, OTel, Jaeger | Packaging, hosting, and observability. |
+## [HASH: aba76f3004c605c401c4c14e979ac4f19d6db2d8fddb45793685304f1d8d1bd4] | [REF: CLAUDE.md v8.0] | [2026-05-10T12:01:40Z] | [ab1f435d]
+- **Sovereign Agentic Commander Protocol**: Institutionalized the Zero-Trust/Zero-Magic paradigm for high-autonomy engineering.
+- **XFV Proof Requirement**: Mandated physical execution logs (`5_EXECUTION_LOG.txt`) for all tool-driven operations.
+- **KHP Verification**: Established the Knowledge Hash Protocol for immutable recording of verified insights.
+- **CWSP Efficiency**: Integrated the Context Window Survival Protocol to maximize agentic token utility.
 
 ---
 

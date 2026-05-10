@@ -16,12 +16,16 @@ use opentelemetry_otlp::WithExportConfig;
 use opentelemetry_sdk::{trace as sdktrace, Resource};
 
 mod auth_middleware;
+mod resilience;
+
+use resilience::{ResilienceProvider, CircuitBreaker};
 
 struct AppState {
     client: Client,
     staff_service_url: String,
     leave_service_url: String,
     policy_service_url: String,
+    resilience: ResilienceProvider,
 }
 
 fn init_tracing() {
@@ -61,6 +65,7 @@ async fn main() {
         staff_service_url: std::env::var("STAFF_SERVICE_URL").unwrap_or_else(|_| "http://localhost:8081".to_string()),
         leave_service_url: std::env::var("LEAVE_SERVICE_URL").unwrap_or_else(|_| "http://localhost:8082".to_string()),
         policy_service_url: std::env::var("POLICY_SERVICE_URL").unwrap_or_else(|_| "http://localhost:8083".to_string()),
+        resilience: ResilienceProvider::new(),
     });
 
     let api_routes = Router::new()
@@ -84,6 +89,7 @@ async fn main() {
         .route("/policy/holidays", get(proxy_policy_holidays))
         
         .layer(middleware::from_fn(auth_middleware::auth_middleware))
+        .layer(middleware::from_fn_with_state(state.resilience.rate_limiter.clone(), resilience::rate_limit_middleware))
         .with_state(state);
 
     let app = Router::new()
@@ -103,7 +109,7 @@ async fn proxy_staff_profile(
     headers: header::HeaderMap,
 ) -> impl IntoResponse {
     let url = format!("{}/api/v1/staff/profile", state.staff_service_url);
-    forward_request(&state.client, &url, headers, Method::GET, None).await
+    forward_request(&state.client, &url, headers, Method::GET, None, &state.resilience.staff_breaker).await
 }
 
 async fn proxy_staff_by_id(
@@ -112,7 +118,7 @@ async fn proxy_staff_by_id(
     headers: header::HeaderMap,
 ) -> impl IntoResponse {
     let url = format!("{}/api/v1/staff/{}", state.staff_service_url, id);
-    forward_request(&state.client, &url, headers, Method::GET, None).await
+    forward_request(&state.client, &url, headers, Method::GET, None, &state.resilience.staff_breaker).await
 }
 
 async fn proxy_staff_register(
@@ -121,7 +127,7 @@ async fn proxy_staff_register(
     body: axum::body::Bytes,
 ) -> impl IntoResponse {
     let url = format!("{}/api/v1/staff/register", state.staff_service_url);
-    forward_request(&state.client, &url, headers, Method::POST, Some(body)).await
+    forward_request(&state.client, &url, headers, Method::POST, Some(body), &state.resilience.staff_breaker).await
 }
 
 async fn proxy_staff_terminate(
@@ -130,7 +136,7 @@ async fn proxy_staff_terminate(
     headers: header::HeaderMap,
 ) -> impl IntoResponse {
     let url = format!("{}/api/v1/staff/terminate/{}", state.staff_service_url, id);
-    forward_request(&state.client, &url, headers, Method::POST, None).await
+    forward_request(&state.client, &url, headers, Method::POST, None, &state.resilience.staff_breaker).await
 }
 
 async fn proxy_leave_requests(
@@ -140,7 +146,7 @@ async fn proxy_leave_requests(
     body: Option<axum::body::Bytes>,
 ) -> impl IntoResponse {
     let url = format!("{}/api/v1/leave/requests", state.leave_service_url);
-    forward_request(&state.client, &url, headers, method, body).await
+    forward_request(&state.client, &url, headers, method, body, &state.resilience.leave_breaker).await
 }
 
 async fn proxy_policy_leave_types(
@@ -148,7 +154,7 @@ async fn proxy_policy_leave_types(
     headers: header::HeaderMap,
 ) -> impl IntoResponse {
     let url = format!("{}/api/v1/policies", state.policy_service_url);
-    forward_request(&state.client, &url, headers, Method::GET, None).await
+    forward_request(&state.client, &url, headers, Method::GET, None, &state.resilience.policy_breaker).await
 }
 
 async fn proxy_policy_leave_type_by_id(
@@ -157,7 +163,7 @@ async fn proxy_policy_leave_type_by_id(
     headers: header::HeaderMap,
 ) -> impl IntoResponse {
     let url = format!("{}/api/v1/policy/leave-types/{}", state.policy_service_url, id);
-    forward_request(&state.client, &url, headers, Method::GET, None).await
+    forward_request(&state.client, &url, headers, Method::GET, None, &state.resilience.policy_breaker).await
 }
 
 async fn proxy_policy_holidays(
@@ -173,7 +179,7 @@ async fn proxy_policy_holidays(
         }
     }
 
-    forward_request(&state.client, &url, headers, Method::GET, None).await
+    forward_request(&state.client, &url, headers, Method::GET, None, &state.resilience.policy_breaker).await
 }
 
 async fn forward_request(
@@ -182,32 +188,34 @@ async fn forward_request(
     headers: header::HeaderMap, 
     method: Method,
     body: Option<axum::body::Bytes>,
+    breaker: &CircuitBreaker,
 ) -> impl IntoResponse {
-    let mut req = client.request(method, url);
-    
-    // Forward headers
-    for (name, value) in headers.iter() {
-        if name != header::HOST {
-            req = req.header(name, value);
+    let breaker_res = breaker.call(move || async move {
+        let mut req = client.request(method.clone(), url);
+        
+        // Forward headers
+        for (name, value) in headers.iter() {
+            if name != header::HOST {
+                req = req.header(name, value);
+            }
         }
-    }
 
-    if let Some(b) = body {
-        req = req.body(b);
-    }
+        if let Some(ref b) = body {
+            req = req.body(b.clone());
+        }
 
-    match req.send().await {
+        req.send().await.map_err(|e| e)
+    }).await;
+
+    match breaker_res {
         Ok(resp) => {
             let status = resp.status().as_u16();
             let body = resp.bytes().await.unwrap_or_default();
             let mut response = (axum::http::StatusCode::from_u16(status).unwrap(), body).into_response();
-            
-            // Forward back some headers if needed (e.g. content-type)
-            // For now, assume JSON
             response.headers_mut().insert(header::CONTENT_TYPE, header::HeaderValue::from_static("application/json"));
-            
             response
         },
-        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response()
+        Err(failsafe::Error::Inner(e)) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+        Err(failsafe::Error::Rejected) => (axum::http::StatusCode::SERVICE_UNAVAILABLE, "Service temporarily unavailable (Circuit Breaker Open)".to_string()).into_response(),
     }
 }
