@@ -14,8 +14,11 @@ chrono = { workspace = true }
 argon2 = { workspace = true }
 validator = { workspace = true }
 tracing = { workspace = true }
+jsonwebtoken = { workspace = true }
 tracing-subscriber = { workspace = true }
 opentelemetry = { workspace = true }
+opentelemetry_sdk = { workspace = true }
+opentelemetry-otlp = { workspace = true }
 tracing-opentelemetry = { workspace = true }
 thiserror = "1"
 async-trait = "0.1"

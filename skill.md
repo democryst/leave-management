@@ -10,11 +10,12 @@
 4. **Unified Observability:** OTel `trace_id` is the common thread required in all localized manuals to ensure cross-service visibility.
 **Gotcha:** Supervisor must audit inter-service contracts (gRPC/REST) early in the `/tech` phase to prevent breaking changes during parallel agent execution.
 
+## [HASH: 6cff285d20a1b54622521fb8a854e3cc235ad2d1a8523344f3868aca3264397e] | [REF: CLAUDE.md v7.0] | 2026-05-10 | [PARENT: Distributed PII Masking]
 ## [Security] — Distributed PII Masking
 **Discovered:** 2026-05-09
-**Context:** Handling Staff data across multiple microservices.
-**Pattern:** Mandatory implementation of a `Mask` trait in the Rust `domain` layer of every service. No PII should ever leave the domain layer unmasked in logs or traces.
-**Gotcha:** Ensure `trace_id` propagation doesn't accidentally log unmasked PII during the propagation step in the Gateway.
+**Verified:** 2026-05-10 (Implemented in Staff, Leave, Policy services)
+**Pattern:** Mandatory implementation of a `Mask` trait in the Rust `domain` layer. The Service layer must call `.mask()` before returning data to Adapters.
+**Gotcha:** Ensure `password_hash` is always masked even in internal logs.
 
 ## [Technical] — Rust v1.8x / Axum 0.7 / SQLx 0.8 Hardening
 **Discovered:** 2026-05-09

@@ -1,6 +1,6 @@
 # Domain Model Sketch
 
-## 1. Staff Context (Owner: gemma-dev @ services/staff)
+## 1. Staff Context
 Manages the organizational hierarchy and identity.
 - **Staff Aggregate:**
   - `id` (UUIDv7) - Primary Key.
@@ -12,7 +12,7 @@ Manages the organizational hierarchy and identity.
   - `manager_id` (UUIDv7, Nullable) - Self-referential link for Org Chart.
   - `created_at`, `updated_at`.
 
-## 2. Leave Context (Owner: gemma-dev @ services/leave)
+## 2. Leave Context
 Manages the lifecycle of a leave request and the math of balances.
 - **LeaveRequest Aggregate:**
   - `id` (UUIDv7).
@@ -28,7 +28,7 @@ Manages the lifecycle of a leave request and the math of balances.
   - `balance` (Decimal).
   - `accrued_this_year` (Decimal).
 
-## 3. Policy Context (Owner: gemma-dev @ services/policy)
+## 3. Policy Context
 Reference data and global constraints.
 - **LeaveType Entity:**
   - `id` (UUIDv7).
@@ -39,6 +39,7 @@ Reference data and global constraints.
   - `date` (Date).
   - `description` (String).
 
-## 4. Cross-Cutting (Owner: gemma-arch / gemma-devops)
+## 4. Cross-Cutting Protocols
 - **Trace Context:** `trace_id` propagated via OTel across all contexts.
 - **Audit Event:** `(timestamp, actor_id, action, service_id, trace_id)`.
+- **Identity Context:** `X-User-Id` and `X-User-Role` headers injected by the Gateway.

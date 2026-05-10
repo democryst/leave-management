@@ -9,3 +9,10 @@ pub trait StaffRepository: Send + Sync {
     async fn save(&self, staff: Staff) -> Result<(), String>;
     async fn get_reports(&self, manager_id: Uuid) -> Result<Vec<Staff>, String>;
 }
+
+#[async_trait]
+pub trait StaffService: Send + Sync {
+    async fn get_staff_by_id(&self, id: Uuid) -> Result<Option<Staff>, String>;
+    async fn register_staff(&self, staff: Staff) -> Result<(), String>;
+    async fn get_manager_reports(&self, manager_id: Uuid) -> Result<Vec<Staff>, String>;
+}

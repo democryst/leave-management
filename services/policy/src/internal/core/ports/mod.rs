@@ -11,3 +11,9 @@ pub trait PolicyRepository: Send + Sync {
     async fn get_blackout_dates(&self) -> Result<Vec<BlackoutDate>, String>;
     async fn add_blackout_date(&self, blackout: BlackoutDate) -> Result<(), String>;
 }
+
+#[async_trait]
+pub trait PolicyService: Send + Sync {
+    async fn list_leave_types(&self) -> Result<Vec<LeaveType>, String>;
+    async fn validate_leave_request(&self, leave_type_id: Uuid, start_date: chrono::NaiveDate, end_date: chrono::NaiveDate) -> Result<bool, String>;
+}

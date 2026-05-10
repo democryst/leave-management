@@ -22,6 +22,15 @@ pub trait LeaveRepository: Send + Sync {
 }
 
 #[async_trait]
+pub trait LeaveService: Send + Sync {
+    async fn submit_request(&self, request: LeaveRequest) -> Result<LeaveRequest, String>;
+    async fn approve_request(&self, id: Uuid, approver_id: Uuid) -> Result<(), String>;
+    async fn reject_request(&self, id: Uuid, approver_id: Uuid) -> Result<(), String>;
+    async fn get_staff_leave_history(&self, staff_id: Uuid) -> Result<Vec<LeaveRequest>, String>;
+    async fn get_current_balance(&self, staff_id: Uuid, leave_type_id: Uuid) -> Result<LeaveBalance, String>;
+}
+
+#[async_trait]
 pub trait PolicyProvider: Send + Sync {
     /// Verifies if a given leave type ID is valid by calling the Policy Service.
     async fn is_leave_type_valid(&self, leave_type_id: Uuid, token: &str) -> Result<bool, String>;

@@ -3,6 +3,10 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use chrono::{DateTime, Utc};
 
+pub trait Mask {
+    fn mask(&self) -> Self;
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, sqlx::Type)]
 #[sqlx(type_name = "text", rename_all = "lowercase")]
 pub enum StaffRole {
@@ -22,4 +26,13 @@ pub struct Staff {
     pub manager_id: Option<Uuid>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
+}
+
+impl Mask for Staff {
+    fn mask(&self) -> Self {
+        Self {
+            password_hash: "[MASKED]".to_string(),
+            ..self.clone()
+        }
+    }
 }

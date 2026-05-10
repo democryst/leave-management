@@ -34,8 +34,13 @@ pub async fn auth_middleware(
 
     let edge_token = auth_header.ok_or(StatusCode::UNAUTHORIZED)?;
 
-    // 2. Validate Edge JWT (Assuming HS256 for the Edge for now)
-    let edge_secret = env::var("EDGE_JWT_SECRET").unwrap_or_else(|_| "placeholder_secret".to_string());
+    // 2. Validate Edge JWT
+    // CRITICAL: No hardcoded fallback. Must fail if EDGE_JWT_SECRET is missing.
+    let edge_secret = env::var("EDGE_JWT_SECRET").map_err(|_| {
+        tracing::error!("EDGE_JWT_SECRET not set");
+        StatusCode::INTERNAL_SERVER_ERROR
+    })?;
+
     let mut validation = Validation::default();
     validation.validate_exp = true;
     
@@ -43,16 +48,31 @@ pub async fn auth_middleware(
         edge_token,
         &DecodingKey::from_secret(edge_secret.as_bytes()),
         &validation
-    ).map_err(|_| StatusCode::UNAUTHORIZED)?;
+    ).map_err(|e| {
+        tracing::warn!("Edge JWT validation failed: {}", e);
+        StatusCode::UNAUTHORIZED
+    })?;
 
     // 3. Generate Internal Service Token (IST) per ADR-001 (RS256)
     let ist = generate_internal_token(&token_data.claims)
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
-    // 4. Inject IST into Authorization header for downstream services
+    // 4. Inject IST and User Identity into headers for downstream services
     req.headers_mut().insert(
         header::AUTHORIZATION,
         header::HeaderValue::from_str(&format!("Bearer {}", ist))
+            .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?
+    );
+    
+    req.headers_mut().insert(
+        "X-User-Id",
+        header::HeaderValue::from_str(&token_data.claims.sub)
+            .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?
+    );
+
+    req.headers_mut().insert(
+        "X-User-Role",
+        header::HeaderValue::from_str(&token_data.claims.role)
             .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?
     );
 
@@ -60,17 +80,22 @@ pub async fn auth_middleware(
 }
 
 fn generate_internal_token(claims: &Claims) -> Result<String, jsonwebtoken::errors::Error> {
-    let private_key_pem = env::var("IST_PRIVATE_KEY")
-        .unwrap_or_else(|_| "---BEGIN RSA PRIVATE KEY---\n...placeholder...\n---END RSA PRIVATE KEY---".to_string());
+    // CRITICAL: No hardcoded fallback. Must fail if IST_PRIVATE_KEY is missing.
+    let private_key_pem = env::var("IST_PRIVATE_KEY").map_err(|_| {
+        tracing::error!("IST_PRIVATE_KEY not set");
+        jsonwebtoken::errors::Error::from(jsonwebtoken::errors::ErrorKind::InvalidRsaKey("Missing IST_PRIVATE_KEY".to_string()))
+    })?;
 
     // IST uses RS256 per ADR-001
     let header = Header::new(Algorithm::RS256);
 
+    // IST should have its own short-lived expiration
+    let now = chrono::Utc::now().timestamp() as usize;
     let ist_claims = Claims {
         sub: claims.sub.clone(),
         role: claims.role.clone(),
-        exp: claims.exp,
-        iat: claims.iat,
+        exp: now + 900, // IST valid for 15 minutes
+        iat: now,
         iss: Some(INTERNAL_ISSUER.to_string()),
     };
 

@@ -1,15 +1,12 @@
-use axum::{extract::{Path, State}, http::StatusCode, response::IntoResponse, Json};
+use axum::{extract::State, http::StatusCode, response::IntoResponse, Json};
 use std::sync::Arc;
-use uuid::Uuid;
-use crate::internal::core::ports::PolicyRepository;
+use crate::internal::core::ports::PolicyService;
 
-pub async fn get_policy(
-    State(repo): State<Arc<dyn PolicyRepository>>,
-    Path(id): Path<Uuid>,
+pub async fn list_policies(
+    State(service): State<Arc<dyn PolicyService>>,
 ) -> impl IntoResponse {
-    match repo.get_leave_type_by_id(id).await {
-        Ok(Some(lt)) => (StatusCode::OK, Json(serde_json::json!(lt))),
-        Ok(None) => (StatusCode::NOT_FOUND, Json(serde_json::json!({"error": "Policy not found"}))),
+    match service.list_leave_types().await {
+        Ok(policies) => (StatusCode::OK, Json(serde_json::json!(policies))),
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json!({"error": e})))
     }
 }

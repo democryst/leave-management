@@ -14,10 +14,11 @@ sequenceDiagram
     UI->>GW: POST /api/v1/leave/requests (Edge JWT)
     Note over GW: Auth Middleware: Validates Edge JWT
     GW->>GW: Generate IST (RS256)
-    GW->>LV: POST /api/v1/leave/requests (IST)
+    Note over GW: Inject X-User-Id & X-User-Role headers
+    GW->>LV: POST /api/v1/leave/requests (IST + Identity Headers)
     
     Note over LV: LeaveApplicationService Execution
-    LV->>PL: GET /policies/leave-types/:id (IST)
+    LV->>PL: GET /api/v1/policies (IST)
     PL-->>LV: Valid Policy Data
     
     LV->>DB: BEGIN Transaction
@@ -45,6 +46,7 @@ Each service is partitioned into:
     - **Gateway:** External service clients (reqwest).
 
 ## 🔭 Observability Strategy
-- **Traces:** Propagated via standard OTel headers (`traceparent`).
-- **Context:** Every log entry includes the `trace_id` for cross-service debugging.
-- **Visualizer:** Jaeger OTLP endpoint.
+- **Traces:** Full-stack propagation from Browser -> Gateway -> Services.
+- **Context:** Standard OTel `traceparent` headers are used for all inter-service calls.
+- **Collector:** OpenTelemetry Collector (v0.31) exports to Jaeger.
+- **Identity:** `X-User-Id` is propagated to services to ensure consistent logging of user actions across the trace.

@@ -3,6 +3,10 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use chrono::{DateTime, Utc, NaiveDate};
 
+pub trait Mask {
+    fn mask(&self) -> Self;
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
 pub struct LeaveType {
     pub id: Uuid,
@@ -14,6 +18,12 @@ pub struct LeaveType {
     pub updated_at: DateTime<Utc>,
 }
 
+impl Mask for LeaveType {
+    fn mask(&self) -> Self {
+        self.clone()
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
 pub struct BlackoutDate {
     pub id: Uuid,
@@ -22,4 +32,10 @@ pub struct BlackoutDate {
     pub end_date: NaiveDate,
     pub description: Option<String>,
     pub created_at: DateTime<Utc>,
+}
+
+impl Mask for BlackoutDate {
+    fn mask(&self) -> Self {
+        self.clone()
+    }
 }

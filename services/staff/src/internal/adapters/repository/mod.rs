@@ -1,7 +1,7 @@
 use async_trait::async_trait;
-use sqlx::{PgPool, Postgres, Row};
+use sqlx::{PgPool, Postgres};
 use uuid::Uuid;
-use crate::internal::core::domain::{Staff, StaffRole};
+use crate::internal::core::domain::Staff;
 use crate::internal::core::ports::StaffRepository;
 
 /// The concrete implementation of the StaffRepository trait using SQLx.

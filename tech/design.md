@@ -6,6 +6,8 @@ graph TD
     User([User Browser])
     Web[Next.js Web App]
     Gateway[Axum API Gateway]
+    Collector[OTel Collector]
+    Jaeger[Jaeger UI]
     
     subgraph Services
         Staff[Staff Service]
@@ -19,26 +21,36 @@ graph TD
         PolicyDB[(Policy DB)]
     end
     
-    User -->|HTTPS| Web
-    Web -->|HTTPS + JWT| Gateway
+    User -->|HTTP| Web
+    Web -->|HTTP + Edge JWT| Gateway
     
-    Gateway -->|RS256 + OTel| Staff
-    Gateway -->|RS256 + OTel| Leave
-    Gateway -->|RS256 + OTel| Policy
+    Gateway -->|RS256 IST + X-User-Id| Staff
+    Gateway -->|RS256 IST + X-User-Id| Leave
+    Gateway -->|RS256 IST + X-User-Id| Policy
     
     Staff --> StaffDB
     Leave --> LeaveDB
     Policy --> PolicyDB
     
-    Leave -.->|Query| Staff
-    Leave -.->|Query| Policy
+    Leave -.->|HTTP + IST| Policy
+    
+    Services -.->|OTLP| Collector
+    Web -.->|OTLP| Collector
+    Gateway -.->|OTLP| Collector
+    Collector -.-> Jaeger
 ```
 
 ## Data Flow: Leave Request Submission
-1. **User** submits request via **Web**.
-2. **Web** calls `/api/leave` on **Gateway**.
-3. **Gateway** validates User JWT, generates **Internal IST**, and starts **OTel Span**.
-4. **Gateway** routes to **Leave Service**.
-5. **Leave Service** validates IST, checks **Policy Service** for blackout dates, and **Staff Service** for manager info.
-6. **Leave Service** writes to **Leave DB** and returns Success.
-7. **Gateway** closes span and returns response to **Web**.
+1. **User** submits request via **Web** (Next.js).
+2. **Web** propagates its **OTel Trace Context** and calls `/api/v1/leave/requests` on **Gateway**.
+3. **Gateway** validates Edge JWT, generates a short-lived **Internal IST** (RS256), and injects `X-User-Id`/`X-User-Role` headers.
+4. **Gateway** proxies the request to the **Leave Service**.
+5. **Leave Service** consumes the identity headers, validates business rules against the **Policy Service**, and checks staff context via **Staff Service**.
+6. **Leave Service** executes a transactional write to the **Leave DB** (using `BigDecimal` for precision).
+7. **Gateway** returns the response; the entire lifecycle is captured in a single trace viewable in **Jaeger**.
+
+## Networking & Discovery
+In the orchestrated environment (Docker Compose):
+- **Gateway:** Proxies to `http://staff-service:8081`, `http://leave-service:8082`, etc.
+- **Trace Sink:** All components export to `http://otel-collector:4317`.
+- **Isolation:** Databases are only accessible within the internal `leave-net` network.
