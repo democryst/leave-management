@@ -33,4 +33,32 @@ impl StaffService for StaffServiceImpl {
         let reports = self.repo.get_reports(manager_id).await?;
         Ok(reports.into_iter().map(|s| s.mask()).collect())
     }
+
+    async fn resolve_approver_chain(&self, staff_id: Uuid) -> Result<Vec<Staff>, String> {
+        let mut chain = Vec::new();
+        let mut current_id = staff_id;
+
+        // Limiting to 5 levels to prevent infinite loops in bad data
+        for _ in 0..5 {
+            if let Some(staff) = self.repo.find_by_id(current_id).await? {
+                if let Some(manager_id) = staff.manager_id {
+                    if let Some(manager) = self.repo.find_by_id(manager_id).await? {
+                        chain.push(manager.mask());
+                        current_id = manager_id;
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+        Ok(chain)
+    }
+
+    async fn terminate_staff(&self, id: Uuid) -> Result<(), String> {
+        self.repo.terminate(id).await
+    }
 }

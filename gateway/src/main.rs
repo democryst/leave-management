@@ -68,6 +68,13 @@ async fn main() {
         .route("/staff/profile", get(proxy_staff_profile))
         .route("/staff/:id", get(proxy_staff_by_id))
         
+        // Admin Staff Routes
+        .nest("/admin", Router::new()
+            .route("/staff/register", axum::routing::post(proxy_staff_register))
+            .route("/staff/terminate/:id", axum::routing::post(proxy_staff_terminate))
+            .layer(middleware::from_fn(auth_middleware::admin_only_middleware))
+        )
+        
         // Leave Routes
         .route("/leave/requests", get(proxy_leave_requests).post(proxy_leave_requests))
         
@@ -104,6 +111,24 @@ async fn proxy_staff_by_id(
 ) -> impl IntoResponse {
     let url = format!("{}/api/v1/staff/{}", state.staff_service_url, id);
     forward_request(&state.client, &url, headers, Method::GET, None).await
+}
+
+async fn proxy_staff_register(
+    State(state): State<Arc<AppState>>,
+    headers: header::HeaderMap,
+    body: axum::body::Bytes,
+) -> impl IntoResponse {
+    let url = format!("{}/api/v1/staff/register", state.staff_service_url);
+    forward_request(&state.client, &url, headers, Method::POST, Some(body)).await
+}
+
+async fn proxy_staff_terminate(
+    State(state): State<Arc<AppState>>,
+    Path(id): Path<String>,
+    headers: header::HeaderMap,
+) -> impl IntoResponse {
+    let url = format!("{}/api/v1/staff/terminate/{}", state.staff_service_url, id);
+    forward_request(&state.client, &url, headers, Method::POST, None).await
 }
 
 async fn proxy_leave_requests(

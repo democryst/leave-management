@@ -63,6 +63,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 4. Build Router
     let app = Router::new()
         .route("/api/v1/leave/requests", post(apply_leave))
+        .route("/api/v1/leave/approvals", axum::routing::get(crate::internal::adapters::handler::get_pending_approvals))
         .with_state(leave_service);
 
     // 5. Start Server

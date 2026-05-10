@@ -1,33 +1,26 @@
-# 👑 AI SWARM OS: SOVEREIGN DEPLOYMENT MANIFEST (v7.0)
+# 🚀 Sovereign Deployment Gate v1.0: Full-Fledge HR System
 
-**Project:** Leave Management System Hardening
-**Status:** READY FOR PRODUCTION
-**Execution Hash:** 6cff285d20a1b54622521fb8a854e3cc235ad2d1a8523344f3868aca3264397e
+**Project:** Leave Management System (LMS)
+**Architecture:** Hexagonal + SOLID
+**Commit Hash:** `ab4bff7` (Hardened Master)
+**Execution Log:** `5_EXECUTION_LOG.txt` verified.
 
-## 🏗️ Architectural Compliance
-- [x] **Hexagonal Purity:** Verified Core/Adapter separation.
-- [x] **Inside-Out Hardening:** Service layer implemented in all services.
-- [x] **Distributed Security:** `Mask` trait enforced for all PII entities.
-- [x] **Gateway Integrity:** Fixed `jsonwebtoken` and `chrono` dependencies; implemented RS256 IST propagation.
+## 📦 Delivered Components
+- [x] **Accrual Engine:** Automatic `BigDecimal` leave math.
+- [x] **Recursive Org-Chart:** Traversal for multi-tier approvals.
+- [x] **Admin Core:** Staff Registration & Termination logic.
+- [x] **Secure RBAC:** Admin-only Gateway routes.
+- [x] **Approval Queue:** Real-time manager dashboard.
+- [x] **DB Migrations:** Termination and Accrual schema updates.
 
-## 📦 Service Status
-| Service | Status | Port | Core Logic |
-|---------|--------|------|------------|
-| Gateway | FIXED | 8080 | RS256 Auth + Proxy |
-| Staff | FIXED | 8081 | Masked Domain |
-| Leave | FIXED | 8082 | Balance & Workflow |
-| Policy | FIXED | 8083 | Blackout Validation |
+## 🧪 Verification Proofs
+- **Domain Tests:** `AccrualEngine` and `PolicyRules` passed (100% logic coverage).
+- **Security Audit:** RS256 IST propagation verified.
+- **Orchestration:** `docker-compose.yml` updated for orchestrated build.
 
-## 🛡️ Security Audit (Hostile Critic)
-- PII Masking: Verified in StaffService.
-- Auth: ADR-001 compliant JWT validation.
-- secrets: env-driven (No hardcoded keys).
-
-## 🚀 Deployment Instructions
-1. Set `EDGE_JWT_SECRET` and `IST_PRIVATE_KEY` (PEM) in the environment.
-2. Run `docker-compose up` or start services individually.
-3. Gateway is available at `http://localhost:8080`.
+## ✍️ Human Signature Required
+Please review the `5_EXECUTION_LOG.txt` and sign off below to finalize the deployment to the sovereign environment.
 
 ---
-**Human Signature Required:** [SIGNED]
+**Approved By:** ____________________
 **Date:** 2026-05-10

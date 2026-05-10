@@ -105,3 +105,20 @@ fn generate_internal_token(claims: &Claims) -> Result<String, jsonwebtoken::erro
         &EncodingKey::from_rsa_pem(private_key_pem.as_bytes())?
     )
 }
+
+/// RBAC: Enforces that the user has the 'admin' role.
+pub async fn admin_only_middleware(
+    req: Request,
+    next: Next,
+) -> Result<Response, StatusCode> {
+    let role = req.headers()
+        .get("X-User-Role")
+        .and_then(|h| h.to_str().ok());
+
+    if let Some("admin") = role {
+        Ok(next.run(req).await)
+    } else {
+        tracing::warn!("Blocked non-admin access to administrative endpoint");
+        Err(StatusCode::FORBIDDEN)
+    }
+}

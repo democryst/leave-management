@@ -24,6 +24,7 @@ pub struct Staff {
     pub password_hash: String,
     pub role: StaffRole,
     pub manager_id: Option<Uuid>,
+    pub terminated_at: Option<DateTime<Utc>>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }

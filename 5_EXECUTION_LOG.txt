@@ -1,0 +1,639 @@
+    Updating crates.io index
+     Locking 353 packages to latest compatible versions
+      Adding axum v0.7.9 (available: v0.8.9)
+      Adding generic-array v0.14.7 (available: v0.14.9)
+      Adding jsonwebtoken v9.3.1 (available: v10.3.0)
+      Adding opentelemetry v0.31.0 (available: v0.32.0)
+      Adding opentelemetry-otlp v0.31.1 (available: v0.32.0)
+      Adding opentelemetry_sdk v0.31.0 (available: v0.32.0)
+      Adding reqwest v0.12.28 (available: v0.13.3)
+      Adding thiserror v1.0.69 (available: v2.0.18)
+      Adding tower-http v0.5.2 (available: v0.6.10)
+      Adding validator v0.19.0 (available: v0.20.0)
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.45
+   Compiling unicode-ident v1.0.24
+   Compiling libc v0.2.186
+   Compiling serde_core v1.0.228
+   Compiling serde v1.0.228
+   Compiling cfg-if v1.0.4
+   Compiling pin-project-lite v0.2.17
+   Compiling once_cell v1.21.4
+   Compiling futures-core v0.3.32
+   Compiling bytes v1.11.1
+   Compiling parking_lot_core v0.9.12
+   Compiling scopeguard v1.2.0
+   Compiling itoa v1.0.18
+   Compiling lock_api v0.4.14
+   Compiling stable_deref_trait v1.2.1
+   Compiling core-foundation-sys v0.8.7
+   Compiling memchr v2.8.0
+   Compiling futures-sink v0.3.32
+   Compiling percent-encoding v2.3.2
+   Compiling tracing-core v0.1.36
+   Compiling equivalent v1.0.2
+   Compiling futures-task v0.3.32
+   Compiling futures-io v0.3.32
+   Compiling log v0.4.29
+   Compiling version_check v0.9.5
+   Compiling hashbrown v0.17.1
+   Compiling subtle v2.6.1
+   Compiling litemap v0.8.2
+   Compiling writeable v0.6.3
+   Compiling generic-array v0.14.7
+   Compiling utf8_iter v1.0.4
+   Compiling icu_normalizer_data v2.2.0
+   Compiling slab v0.4.12
+   Compiling icu_properties_data v2.2.0
+   Compiling indexmap v2.14.0
+   Compiling typenum v1.20.0
+   Compiling autocfg v1.5.0
+   Compiling bitflags v2.11.1
+   Compiling shlex v1.3.0
+   Compiling find-msvc-tools v0.1.9
+   Compiling fnv v1.0.7
+   Compiling http v1.4.0
+   Compiling cc v1.2.62
+   Compiling syn v2.0.117
+   Compiling zeroize v1.8.2
+   Compiling num-traits v0.2.19
+   Compiling rustls-pki-types v1.14.1
+   Compiling ring v0.17.14
+   Compiling http-body v1.0.1
+   Compiling futures-channel v0.3.32
+   Compiling thiserror v2.0.18
+   Compiling zerocopy v0.8.48
+   Compiling untrusted v0.9.0
+   Compiling zmij v1.0.21
+   Compiling synstructure v0.13.2
+   Compiling mio v1.2.0
+   Compiling serde_derive v1.0.228
+   Compiling zerofrom-derive v0.1.7
+   Compiling socket2 v0.6.3
+   Compiling yoke-derive v0.8.2
+   Compiling tracing-attributes v0.1.31
+   Compiling zerofrom v0.1.7
+   Compiling errno v0.3.14
+   Compiling zerovec-derive v0.11.3
+   Compiling displaydoc v0.2.5
+   Compiling signal-hook-registry v1.4.8
+   Compiling tokio-macros v2.7.0
+   Compiling tracing v0.1.44
+   Compiling futures-macro v0.3.32
+   Compiling getrandom v0.2.17
+   Compiling block-buffer v0.10.4
+   Compiling thiserror-impl v2.0.18
+   Compiling futures-util v0.3.32
+   Compiling system-configuration-sys v0.6.0
+   Compiling serde_json v1.0.149
+   Compiling httparse v1.10.1
+   Compiling tower-service v0.3.3
+   Compiling rustls v0.23.40
+   Compiling base64 v0.22.1
+   Compiling rustls-webpki v0.103.13
+   Compiling yoke v0.8.2
+   Compiling atomic-waker v1.1.2
+   Compiling getrandom v0.4.2
+   Compiling try-lock v0.2.5
+   Compiling want v0.3.1
+   Compiling ppv-lite86 v0.2.21
+   Compiling core-foundation v0.9.4
+   Compiling webpki-roots v1.0.7
+   Compiling crossbeam-utils v0.8.21
+   Compiling httpdate v1.0.3
+   Compiling smallvec v1.15.1
+   Compiling parking_lot v0.12.5
+   Compiling tokio v1.52.3
+   Compiling either v1.15.0
+   Compiling form_urlencoded v1.2.2
+   Compiling libm v0.2.16
+   Compiling ipnet v2.12.0
+   Compiling num-integer v0.1.46
+   Compiling crypto-common v0.1.7
+   Compiling sync_wrapper v1.0.2
+   Compiling tower-layer v0.3.3
+   Compiling digest v0.10.7
+   Compiling system-configuration v0.7.0
+   Compiling num-bigint v0.4.6
+   Compiling cpufeatures v0.2.17
+   Compiling http-body-util v0.1.3
+   Compiling iana-time-zone v0.1.65
+   Compiling rustix v1.1.4
+   Compiling foldhash v0.1.5
+   Compiling allocator-api2 v0.2.21
+   Compiling hashbrown v0.15.5
+   Compiling crc-catalog v2.5.0
+   Compiling parking v2.2.1
+   Compiling getrandom v0.3.4
+   Compiling tinyvec_macros v0.1.1
+   Compiling tinyvec v1.11.0
+   Compiling hashlink v0.10.0
+   Compiling crc v3.4.0
+   Compiling webpki-roots v0.26.11
+   Compiling rand_core v0.6.4
+   Compiling async-trait v0.1.89
+   Compiling core-foundation v0.10.1
+   Compiling zerovec v0.11.6
+   Compiling zerotrie v0.2.4
+   Compiling security-framework-sys v2.17.0
+   Compiling bigdecimal v0.4.10
+   Compiling native-tls v0.2.18
+   Compiling fastrand v2.4.1
+   Compiling anyhow v1.0.102
+   Compiling concurrent-queue v2.5.0
+   Compiling event-listener v5.4.1
+   Compiling crossbeam-queue v0.3.12
+   Compiling security-framework v3.7.0
+   Compiling rand_chacha v0.3.1
+   Compiling tokio-util v0.7.18
+   Compiling tokio-stream v0.1.18
+   Compiling tempfile v3.27.0
+   Compiling h2 v0.4.14
+   Compiling tower v0.5.3
+   Compiling unicode-normalization v0.1.25
+   Compiling tinystr v0.8.3
+   Compiling potential_utf v0.1.5
+   Compiling icu_collections v2.2.0
+   Compiling icu_locale_core v2.2.0
+   Compiling unicode-properties v0.1.4
+   Compiling regex-syntax v0.8.10
+   Compiling unicode-bidi v0.3.18
+   Compiling icu_provider v2.2.0
+   Compiling icu_properties v2.2.0
+   Compiling icu_normalizer v2.2.0
+   Compiling regex-automata v0.4.14
+   Compiling stringprep v0.1.5
+   Compiling futures-intrusive v0.5.0
+   Compiling hyper v1.9.0
+   Compiling idna_adapter v1.2.2
+   Compiling idna v1.1.0
+   Compiling rand_core v0.9.5
+   Compiling rand v0.8.6
+   Compiling url v2.5.8
+   Compiling opentelemetry v0.31.0
+   Compiling chrono v0.4.44
+   Compiling hyper-util v0.1.20
+   Compiling sha2 v0.10.9
+   Compiling hmac v0.12.1
+   Compiling itertools v0.14.0
+   Compiling atoi v2.0.0
+   Compiling pin-project-internal v1.1.12
+   Compiling byteorder v1.5.0
+   Compiling uuid v1.23.1
+   Compiling strsim v0.11.1
+   Compiling ryu v1.0.23
+   Compiling ident_case v1.0.1
+   Compiling whoami v1.6.1
+   Compiling mime v0.3.17
+   Compiling home v0.5.12
+   Compiling dotenvy v0.15.7
+   Compiling hex v0.4.3
+   Compiling serde_urlencoded v0.7.1
+   Compiling darling_core v0.20.11
+   Compiling sqlx-core v0.8.6
+   Compiling hkdf v0.12.4
+   Compiling pin-project v1.1.12
+   Compiling rand_chacha v0.9.0
+   Compiling tokio-native-tls v0.3.1
+   Compiling tokio-rustls v0.26.4
+   Compiling hyper-timeout v0.5.2
+   Compiling md-5 v0.10.6
+   Compiling prost-derive v0.14.3
+   Compiling rustversion v1.0.22
+   Compiling hyper-tls v0.6.0
+   Compiling hyper-rustls v0.27.9
+   Compiling rand v0.9.4
+   Compiling tower-http v0.6.10
+   Compiling tonic v0.14.6
+   Compiling futures-executor v0.3.32
+   Compiling proc-macro-error-attr2 v2.0.0
+   Compiling encoding_rs v0.8.35
+   Compiling heck v0.5.0
+   Compiling prost v0.14.3
+   Compiling lazy_static v1.5.0
+   Compiling sharded-slab v0.1.7
+   Compiling proc-macro-error2 v2.0.1
+   Compiling sqlx-postgres v0.8.6
+   Compiling darling_macro v0.20.11
+   Compiling opentelemetry_sdk v0.31.0
+   Compiling darling v0.20.11
+   Compiling reqwest v0.12.28
+   Compiling matchers v0.2.0
+   Compiling tracing-log v0.2.0
+   Compiling thread_local v1.1.9
+   Compiling nu-ansi-term v0.50.3
+   Compiling thiserror v1.0.69
+   Compiling axum-core v0.4.5
+   Compiling tonic-prost v0.14.6
+   Compiling tracing-subscriber v0.3.23
+   Compiling regex v1.12.3
+   Compiling opentelemetry-proto v0.31.0
+   Compiling validator_derive v0.19.0
+   Compiling sqlx-macros-core v0.8.6
+   Compiling opentelemetry-http v0.31.0
+   Compiling thiserror-impl v1.0.69
+   Compiling serde_path_to_error v0.1.20
+   Compiling matchit v0.7.3
+   Compiling opentelemetry-otlp v0.31.1
+   Compiling validator v0.19.0
+   Compiling tracing-opentelemetry v0.32.1
+   Compiling axum v0.7.9
+   Compiling sqlx-macros v0.8.6
+   Compiling sqlx v0.8.6
+   Compiling leave-service v0.1.0 (/Volumes/SSD990PRO2TB/workspace/leave-management/services/leave)
+error[E0599]: no function or associated item named `from_yml_opt` found for struct `chrono::NaiveDate` in the current scope
+   --> services/leave/src/internal/core/domain/accrual.rs:66:36
+    |
+ 66 |             start_date: NaiveDate::from_yml_opt(2023, 1, 1).unwrap(),
+    |                                    ^^^^^^^^^^^^ function or associated item not found in `chrono::NaiveDate`
+    |
+note: if you're trying to build a new `chrono::NaiveDate` consider using one of the following associated functions:
+      chrono::NaiveDate::from_ymd
+      chrono::NaiveDate::from_ymd_opt
+      chrono::NaiveDate::from_yo
+      chrono::NaiveDate::from_yo_opt
+      and 8 others
+   --> /Volumes/SSD990PRO2TB/RustTools/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/chrono-0.4.44/src/naive/date/mod.rs:167:5
+    |
+167 |     pub const fn from_ymd(year: i32, month: u32, day: u32) -> NaiveDate {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+196 |     pub const fn from_ymd_opt(year: i32, month: u32, day: u32) -> Option<NaiveDate> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+215 |     pub const fn from_yo(year: i32, ordinal: u32) -> NaiveDate {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+245 |     pub const fn from_yo_opt(year: i32, ordinal: u32) -> Option<NaiveDate> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: there is an associated function `from_ymd_opt` with a similar name
+    |
+ 66 -             start_date: NaiveDate::from_yml_opt(2023, 1, 1).unwrap(),
+ 66 +             start_date: NaiveDate::from_ymd_opt(2023, 1, 1).unwrap(),
+    |
+
+error[E0599]: no function or associated item named `from_yml_opt` found for struct `chrono::NaiveDate` in the current scope
+   --> services/leave/src/internal/core/domain/accrual.rs:67:38
+    |
+ 67 |             current_date: NaiveDate::from_yml_opt(2023, 5, 1).unwrap(), // 4 months
+    |                                      ^^^^^^^^^^^^ function or associated item not found in `chrono::NaiveDate`
+    |
+note: if you're trying to build a new `chrono::NaiveDate` consider using one of the following associated functions:
+      chrono::NaiveDate::from_ymd
+      chrono::NaiveDate::from_ymd_opt
+      chrono::NaiveDate::from_yo
+      chrono::NaiveDate::from_yo_opt
+      and 8 others
+   --> /Volumes/SSD990PRO2TB/RustTools/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/chrono-0.4.44/src/naive/date/mod.rs:167:5
+    |
+167 |     pub const fn from_ymd(year: i32, month: u32, day: u32) -> NaiveDate {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+196 |     pub const fn from_ymd_opt(year: i32, month: u32, day: u32) -> Option<NaiveDate> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+215 |     pub const fn from_yo(year: i32, ordinal: u32) -> NaiveDate {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+245 |     pub const fn from_yo_opt(year: i32, ordinal: u32) -> Option<NaiveDate> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: there is an associated function `from_ymd_opt` with a similar name
+    |
+ 67 -             current_date: NaiveDate::from_yml_opt(2023, 5, 1).unwrap(), // 4 months
+ 67 +             current_date: NaiveDate::from_ymd_opt(2023, 5, 1).unwrap(), // 4 months
+    |
+
+error[E0599]: no function or associated item named `from_yml_opt` found for struct `chrono::NaiveDate` in the current scope
+   --> services/leave/src/internal/core/domain/accrual.rs:83:36
+    |
+ 83 |             start_date: NaiveDate::from_yml_opt(2023, 1, 1).unwrap(),
+    |                                    ^^^^^^^^^^^^ function or associated item not found in `chrono::NaiveDate`
+    |
+note: if you're trying to build a new `chrono::NaiveDate` consider using one of the following associated functions:
+      chrono::NaiveDate::from_ymd
+      chrono::NaiveDate::from_ymd_opt
+      chrono::NaiveDate::from_yo
+      chrono::NaiveDate::from_yo_opt
+      and 8 others
+   --> /Volumes/SSD990PRO2TB/RustTools/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/chrono-0.4.44/src/naive/date/mod.rs:167:5
+    |
+167 |     pub const fn from_ymd(year: i32, month: u32, day: u32) -> NaiveDate {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+196 |     pub const fn from_ymd_opt(year: i32, month: u32, day: u32) -> Option<NaiveDate> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+215 |     pub const fn from_yo(year: i32, ordinal: u32) -> NaiveDate {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+245 |     pub const fn from_yo_opt(year: i32, ordinal: u32) -> Option<NaiveDate> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: there is an associated function `from_ymd_opt` with a similar name
+    |
+ 83 -             start_date: NaiveDate::from_yml_opt(2023, 1, 1).unwrap(),
+ 83 +             start_date: NaiveDate::from_ymd_opt(2023, 1, 1).unwrap(),
+    |
+
+error[E0599]: no function or associated item named `from_yml_opt` found for struct `chrono::NaiveDate` in the current scope
+   --> services/leave/src/internal/core/domain/accrual.rs:84:38
+    |
+ 84 |             current_date: NaiveDate::from_yml_opt(2023, 1, 15).unwrap(),
+    |                                      ^^^^^^^^^^^^ function or associated item not found in `chrono::NaiveDate`
+    |
+note: if you're trying to build a new `chrono::NaiveDate` consider using one of the following associated functions:
+      chrono::NaiveDate::from_ymd
+      chrono::NaiveDate::from_ymd_opt
+      chrono::NaiveDate::from_yo
+      chrono::NaiveDate::from_yo_opt
+      and 8 others
+   --> /Volumes/SSD990PRO2TB/RustTools/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/chrono-0.4.44/src/naive/date/mod.rs:167:5
+    |
+167 |     pub const fn from_ymd(year: i32, month: u32, day: u32) -> NaiveDate {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+196 |     pub const fn from_ymd_opt(year: i32, month: u32, day: u32) -> Option<NaiveDate> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+215 |     pub const fn from_yo(year: i32, ordinal: u32) -> NaiveDate {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+245 |     pub const fn from_yo_opt(year: i32, ordinal: u32) -> Option<NaiveDate> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: there is an associated function `from_ymd_opt` with a similar name
+    |
+ 84 -             current_date: NaiveDate::from_yml_opt(2023, 1, 15).unwrap(),
+ 84 +             current_date: NaiveDate::from_ymd_opt(2023, 1, 15).unwrap(),
+    |
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `leave-service` (bin "leave-service" test) due to 4 previous errors
+   Compiling leave-service v0.1.0 (/Volumes/SSD990PRO2TB/workspace/leave-management/services/leave)
+warning: trait `Mask` is never used
+ --> services/leave/src/internal/core/domain/mod.rs:7:11
+  |
+7 | pub trait Mask {
+  |           ^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `LeaveBalance` is never constructed
+  --> services/leave/src/internal/core/domain/mod.rs:40:12
+   |
+40 | pub struct LeaveBalance {
+   |            ^^^^^^^^^^^^
+
+warning: field `max_rollover` is never read
+ --> services/leave/src/internal/core/domain/accrual.rs:8:9
+  |
+5 | pub struct AccrualConfig {
+  |            ------------- field in this struct
+...
+8 |     pub max_rollover: BigDecimal,
+  |         ^^^^^^^^^^^^
+  |
+  = note: `AccrualConfig` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: multiple methods are never used
+  --> services/leave/src/internal/core/ports/mod.rs:10:14
+   |
+ 8 | pub trait LeaveRepository: Send + Sync {
+   |           --------------- methods in this trait
+ 9 |     // Request Logic
+10 |     async fn find_request_by_id(&self, id: Uuid) -> Result<Option<LeaveRequest>, String>;
+   |              ^^^^^^^^^^^^^^^^^^
+11 |     async fn save_request(&self, request: LeaveRequest) -> Result<(), String>;
+   |              ^^^^^^^^^^^^
+12 |     async fn update_request_status(&self, id: Uuid, status: LeaveStatus, approver_id: Option<Uuid>) -> Result<(), String>;
+   |              ^^^^^^^^^^^^^^^^^^^^^
+13 |     async fn get_staff_requests(&self, staff_id: Uuid) -> Result<Vec<LeaveRequest>, String>;
+   |              ^^^^^^^^^^^^^^^^^^
+...
+16 |     async fn get_balance(&self, staff_id: Uuid, leave_type_id: Uuid) -> Result<Option<LeaveBalance>, String>;
+   |              ^^^^^^^^^^^
+17 |     async fn save_balance(&self, balance: LeaveBalance) -> Result<(), String>;
+   |              ^^^^^^^^^^^^
+18 |     async fn update_balance(&self, staff_id: Uuid, leave_type_id: Uuid, amount: BigDecimal) -> Result<(), String>;
+   |              ^^^^^^^^^^^^^^
+
+warning: methods `approve_request`, `reject_request`, `get_staff_leave_history`, and `get_current_balance` are never used
+  --> services/leave/src/internal/core/ports/mod.rs:27:14
+   |
+25 | pub trait LeaveService: Send + Sync {
+   |           ------------ methods in this trait
+26 |     async fn submit_request(&self, request: LeaveRequest) -> Result<LeaveRequest, String>;
+27 |     async fn approve_request(&self, id: Uuid, approver_id: Uuid) -> Result<(), String>;
+   |              ^^^^^^^^^^^^^^^
+28 |     async fn reject_request(&self, id: Uuid, approver_id: Uuid) -> Result<(), String>;
+   |              ^^^^^^^^^^^^^^
+29 |     async fn get_staff_leave_history(&self, staff_id: Uuid) -> Result<Vec<LeaveRequest>, String>;
+   |              ^^^^^^^^^^^^^^^^^^^^^^^
+30 |     async fn get_current_balance(&self, staff_id: Uuid, leave_type_id: Uuid) -> Result<LeaveBalance, String>;
+   |              ^^^^^^^^^^^^^^^^^^^
+
+warning: `leave-service` (bin "leave-service" test) generated 5 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.64s
+     Running unittests src/main.rs (target/debug/deps/leave_service-4433ae974b221457)
+
+running 2 tests
+test internal::core::domain::accrual::tests::test_zero_accrual_for_new_joiner ... ok
+test internal::core::domain::accrual::tests::test_basic_accrual ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Compiling leave-service v0.1.0 (/Volumes/SSD990PRO2TB/workspace/leave-management/services/leave)
+error: unexpected closing delimiter: `}`
+   --> services/leave/src/internal/core/domain/accrual.rs:121:1
+    |
+106 |     fn test_rollover() {
+    |                        - this opening brace...
+...
+120 |     }
+    |     - ...matches this closing brace
+121 | }
+    | ^ unexpected closing delimiter
+
+error: could not compile `leave-service` (bin "leave-service" test) due to 1 previous error
+   Compiling leave-service v0.1.0 (/Volumes/SSD990PRO2TB/workspace/leave-management/services/leave)
+warning: trait `Mask` is never used
+ --> services/leave/src/internal/core/domain/mod.rs:7:11
+  |
+7 | pub trait Mask {
+  |           ^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `LeaveBalance` is never constructed
+  --> services/leave/src/internal/core/domain/mod.rs:40:12
+   |
+40 | pub struct LeaveBalance {
+   |            ^^^^^^^^^^^^
+
+warning: multiple methods are never used
+  --> services/leave/src/internal/core/ports/mod.rs:10:14
+   |
+ 8 | pub trait LeaveRepository: Send + Sync {
+   |           --------------- methods in this trait
+ 9 |     // Request Logic
+10 |     async fn find_request_by_id(&self, id: Uuid) -> Result<Option<LeaveRequest>, String>;
+   |              ^^^^^^^^^^^^^^^^^^
+11 |     async fn save_request(&self, request: LeaveRequest) -> Result<(), String>;
+   |              ^^^^^^^^^^^^
+12 |     async fn update_request_status(&self, id: Uuid, status: LeaveStatus, approver_id: Option<Uuid>) -> Result<(), String>;
+   |              ^^^^^^^^^^^^^^^^^^^^^
+13 |     async fn get_staff_requests(&self, staff_id: Uuid) -> Result<Vec<LeaveRequest>, String>;
+   |              ^^^^^^^^^^^^^^^^^^
+...
+16 |     async fn get_balance(&self, staff_id: Uuid, leave_type_id: Uuid) -> Result<Option<LeaveBalance>, String>;
+   |              ^^^^^^^^^^^
+17 |     async fn save_balance(&self, balance: LeaveBalance) -> Result<(), String>;
+   |              ^^^^^^^^^^^^
+18 |     async fn update_balance(&self, staff_id: Uuid, leave_type_id: Uuid, amount: BigDecimal) -> Result<(), String>;
+   |              ^^^^^^^^^^^^^^
+
+warning: methods `approve_request`, `reject_request`, `get_staff_leave_history`, and `get_current_balance` are never used
+  --> services/leave/src/internal/core/ports/mod.rs:27:14
+   |
+25 | pub trait LeaveService: Send + Sync {
+   |           ------------ methods in this trait
+26 |     async fn submit_request(&self, request: LeaveRequest) -> Result<LeaveRequest, String>;
+27 |     async fn approve_request(&self, id: Uuid, approver_id: Uuid) -> Result<(), String>;
+   |              ^^^^^^^^^^^^^^^
+28 |     async fn reject_request(&self, id: Uuid, approver_id: Uuid) -> Result<(), String>;
+   |              ^^^^^^^^^^^^^^
+29 |     async fn get_staff_leave_history(&self, staff_id: Uuid) -> Result<Vec<LeaveRequest>, String>;
+   |              ^^^^^^^^^^^^^^^^^^^^^^^
+30 |     async fn get_current_balance(&self, staff_id: Uuid, leave_type_id: Uuid) -> Result<LeaveBalance, String>;
+   |              ^^^^^^^^^^^^^^^^^^^
+
+warning: `leave-service` (bin "leave-service" test) generated 4 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.34s
+     Running unittests src/main.rs (target/debug/deps/leave_service-4433ae974b221457)
+
+running 3 tests
+test internal::core::domain::accrual::tests::test_zero_accrual_for_new_joiner ... ok
+test internal::core::domain::accrual::tests::test_rollover ... ok
+test internal::core::domain::accrual::tests::test_basic_accrual ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Compiling bitflags v2.11.1
+   Compiling hyper-util v0.1.20
+   Compiling bigdecimal v0.4.10
+   Compiling idna v1.1.0
+   Compiling anyhow v1.0.102
+   Compiling regex-automata v0.4.14
+   Compiling url v2.5.8
+   Compiling tower-http v0.6.10
+   Compiling prost-derive v0.14.3
+   Compiling hyper-timeout v0.5.2
+   Compiling reqwest v0.12.28
+   Compiling axum v0.7.9
+   Compiling sqlx-core v0.8.6
+   Compiling tonic v0.14.6
+   Compiling matchers v0.2.0
+   Compiling tracing-subscriber v0.3.23
+   Compiling prost v0.14.3
+   Compiling opentelemetry-http v0.31.0
+   Compiling tonic-prost v0.14.6
+   Compiling tracing-opentelemetry v0.32.1
+   Compiling opentelemetry-proto v0.31.0
+   Compiling sqlx-postgres v0.8.6
+   Compiling opentelemetry-otlp v0.31.1
+   Compiling sqlx-macros-core v0.8.6
+   Compiling sqlx-macros v0.8.6
+   Compiling sqlx v0.8.6
+   Compiling policy-service v0.1.0 (/Volumes/SSD990PRO2TB/workspace/leave-management/services/policy)
+warning: unused import: `Datelike`
+ --> services/policy/src/internal/core/domain/rules.rs:1:25
+  |
+1 | use chrono::{NaiveDate, Datelike};
+  |                         ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error[E0599]: no function or associated item named `new_v4` found for struct `Uuid` in the current scope
+   --> services/policy/src/internal/core/domain/rules.rs:55:27
+    |
+ 55 |                 id: Uuid::new_v4(),
+    |                           ^^^^^^ function or associated item not found in `Uuid`
+    |
+note: if you're trying to build a new `Uuid` consider using one of the following associated functions:
+      uuid::builder::<impl Uuid>::nil
+      uuid::builder::<impl Uuid>::max
+      uuid::builder::<impl Uuid>::from_fields
+      uuid::builder::<impl Uuid>::from_fields_le
+      and 12 others
+   --> /Volumes/SSD990PRO2TB/RustTools/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/uuid-1.23.1/src/builder.rs:72:5
+    |
+ 72 |     pub const fn nil() -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 98 |     pub const fn max() -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+122 |     pub const fn from_fields(d1: u32, d2: u16, d3: u16, d4: &[u8; 8]) -> Uuid {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+168 |     pub const fn from_fields_le(d1: u32, d2: u16, d3: u16, d4: &[u8; 8]) -> Uuid {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: there is an associated function `new_v7` with a similar name
+   --> /Volumes/SSD990PRO2TB/RustTools/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/uuid-1.23.1/src/v7.rs:71:5
+    |
+ 71 |     pub fn new_v7(ts: Timestamp) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0599`.
+warning: `policy-service` (bin "policy-service" test) generated 1 warning
+error: could not compile `policy-service` (bin "policy-service" test) due to 1 previous error; 1 warning emitted
+   Compiling policy-service v0.1.0 (/Volumes/SSD990PRO2TB/workspace/leave-management/services/policy)
+warning: unused import: `Datelike`
+ --> services/policy/src/internal/core/domain/rules.rs:1:25
+  |
+1 | use chrono::{NaiveDate, Datelike};
+  |                         ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: trait `Mask` is never used
+ --> services/policy/src/internal/core/domain/mod.rs:6:11
+  |
+6 | pub trait Mask {
+  |           ^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: methods `get_leave_type_by_id`, `save_leave_type`, `get_blackout_dates`, and `add_blackout_date` are never used
+  --> services/policy/src/internal/core/ports/mod.rs:9:14
+   |
+ 7 | pub trait PolicyRepository: Send + Sync {
+   |           ---------------- methods in this trait
+ 8 |     async fn get_all_leave_types(&self) -> Result<Vec<LeaveType>, String>;
+ 9 |     async fn get_leave_type_by_id(&self, id: Uuid) -> Result<Option<LeaveType>, String>;
+   |              ^^^^^^^^^^^^^^^^^^^^
+10 |     async fn save_leave_type(&self, leave_type: LeaveType) -> Result<(), String>;
+   |              ^^^^^^^^^^^^^^^
+11 |     async fn get_blackout_dates(&self) -> Result<Vec<BlackoutDate>, String>;
+   |              ^^^^^^^^^^^^^^^^^^
+12 |     async fn add_blackout_date(&self, blackout: BlackoutDate) -> Result<(), String>;
+   |              ^^^^^^^^^^^^^^^^^
+
+warning: method `validate_leave_request` is never used
+  --> services/policy/src/internal/core/ports/mod.rs:18:14
+   |
+16 | pub trait PolicyService: Send + Sync {
+   |           ------------- method in this trait
+17 |     async fn list_leave_types(&self) -> Result<Vec<LeaveType>, String>;
+18 |     async fn validate_leave_request(&self, leave_type_id: Uuid, start_date: chrono::NaiveDate, end_date: chrono::NaiveDate) -> Result<boo...
+   |              ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `policy-service` (bin "policy-service" test) generated 4 warnings (run `cargo fix --bin "policy-service" -p policy-service --tests` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.39s
+     Running unittests src/main.rs (target/debug/deps/policy_service-fe5f868fbb6d332b)
+
+running 2 tests
+test internal::core::domain::rules::tests::test_notice_period ... ok
+test internal::core::domain::rules::tests::test_blackout_conflict ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[2026-05-10T09:45:30Z] ALL 9 STAGES COMPLETED. SYSTEM READY FOR HANDOVER.

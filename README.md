@@ -103,6 +103,7 @@ Access the **Jaeger UI** at `http://localhost:16686` to visualize the life of a 
 ## 📜 Documentation
 Comprehensive design records are available in the [Documentation](./Documentation) and [tech](./tech) directories:
 - [Technical Design](./Documentation/Technical-Design.md)
+- [Engineering Principles](./Documentation/ENGINEERING.md)
 - [ADR-001: Authentication](./tech/adr-001-auth.md)
 - [ADR-002: Tracing](./tech/adr-002-tracing.md)
 

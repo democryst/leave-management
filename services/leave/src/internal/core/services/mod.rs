@@ -60,4 +60,8 @@ impl LeaveService for LeaveServiceImpl {
             None => Err("Balance not found".to_string()),
         }
     }
+
+    async fn get_approver_queue(&self, approver_id: Uuid) -> Result<Vec<LeaveRequest>, String> {
+        self.repo.get_pending_by_approver(approver_id).await
+    }
 }

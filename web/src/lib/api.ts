@@ -9,9 +9,12 @@ export const apiFetch = async <T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> => {
-  // Retrieve the Edge JWT from cookies
-  const cookies = document.cookie.split("; ");
-  const jwt = cookies.find(row => row.startsWith("edge_jwt="))?.split("=")[1];
+  // Retrieve the Edge JWT from cookies (Browser only)
+  let jwt: string | undefined;
+  if (typeof document !== 'undefined') {
+    const cookies = document.cookie.split("; ");
+    jwt = cookies.find(row => row.startsWith("edge_jwt="))?.split("=")[1];
+  }
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
@@ -33,4 +36,13 @@ export const apiFetch = async <T>(
   }
 
   return response.json();
+};
+
+export const api = {
+  get: <T>(endpoint: string) => apiFetch<T>(endpoint, { method: "GET" }),
+  post: <T>(endpoint: string, body: any) => 
+    apiFetch<T>(endpoint, { 
+      method: "POST", 
+      body: JSON.stringify(body) 
+    }),
 };

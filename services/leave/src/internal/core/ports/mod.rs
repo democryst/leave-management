@@ -11,6 +11,7 @@ pub trait LeaveRepository: Send + Sync {
     async fn save_request(&self, request: LeaveRequest) -> Result<(), String>;
     async fn update_request_status(&self, id: Uuid, status: LeaveStatus, approver_id: Option<Uuid>) -> Result<(), String>;
     async fn get_staff_requests(&self, staff_id: Uuid) -> Result<Vec<LeaveRequest>, String>;
+    async fn get_pending_by_approver(&self, approver_id: Uuid) -> Result<Vec<LeaveRequest>, String>;
 
     // Balance Logic
     async fn get_balance(&self, staff_id: Uuid, leave_type_id: Uuid) -> Result<Option<LeaveBalance>, String>;
@@ -28,6 +29,7 @@ pub trait LeaveService: Send + Sync {
     async fn reject_request(&self, id: Uuid, approver_id: Uuid) -> Result<(), String>;
     async fn get_staff_leave_history(&self, staff_id: Uuid) -> Result<Vec<LeaveRequest>, String>;
     async fn get_current_balance(&self, staff_id: Uuid, leave_type_id: Uuid) -> Result<LeaveBalance, String>;
+    async fn get_approver_queue(&self, approver_id: Uuid) -> Result<Vec<LeaveRequest>, String>;
 }
 
 #[async_trait]
