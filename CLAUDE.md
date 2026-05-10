@@ -59,6 +59,37 @@ Instead of keeping context in-conversation, write it to files:
 | Discovered patterns | `skill.md` | When a non-obvious pattern is learned |
 | Multi-step plan | `plan/` or artifact `implementation_plan.md` | Before starting complex work |
 | Debug findings | Artifact `scratch/` directory | During troubleshooting |
+| Knowledge & theory | `Documentation/` (Obsidian vault) | When learning or understanding something new |
+
+### Continuous Learning Protocol (Obsidian Vault Sync)
+
+> **Rule:** When you learn, understand, or discover something meaningful — **write it down** in the Obsidian vault (`Documentation/`). Knowledge that only lives in conversation memory is **lost on truncation**.
+
+**Triggers** — Sync to vault when any of these occur:
+
+1. **New architectural pattern** discovered (e.g., a caching strategy, event sourcing pattern) → `Documentation/` or `skill.md`
+2. **Language idiom or gotcha** learned (e.g., Go's error wrapping, Rust's orphan rule) → `Documentation/languages/<LANG>.md`
+3. **Theoretical insight** understood (e.g., category theory application, formal verification technique) → `Documentation/theory/<TOPIC>.md`
+4. **Security principle** applied or discovered → `Documentation/Security-Architecture.md`
+5. **Engineering decision** made with non-obvious rationale → `tech/adr-NNN.md`
+
+**Vault Structure:**
+
+```
+Documentation/
+├── languages/       # Language-specific idioms, patterns, gotchas
+│   ├── RUST.md
+│   ├── GO.md
+│   └── <LANG>.md
+├── theory/          # CS theory, math, formal methods
+│   ├── FUNCTIONAL.md
+│   └── VERIFICATION.md
+├── ENGINEERING.md   # Engineering principles & practices
+├── Security-Architecture.md
+└── <TOPIC>.md       # Any new knowledge domain
+```
+
+**Format:** Use Obsidian-compatible Markdown with `[[wikilinks]]` for cross-references between notes. Each entry should have a `## Heading`, a brief explanation, and a concrete example from the project where possible.
 
 ### Anti-Bloat Rules
 
